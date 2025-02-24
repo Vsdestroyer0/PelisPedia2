@@ -3,9 +3,13 @@ package Controles;
 import aplicacion.BaseDatos.BaseDatos;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
 import java.net.URL;
@@ -24,7 +28,7 @@ public class HelloController {
 
 
     @FXML
-    private void handleLogin(ActionEvent event){
+    void handleLogin(ActionEvent event){
         String username =txtUsername.getText();
         String password = txtPassword.getText();
 
@@ -32,7 +36,7 @@ public class HelloController {
     }
 
     @FXML
-    private void validarCredenciales(String username, String password){
+    void validarCredenciales(String username, String password){
         Boolean exito = BD.validar_Usuario(username, password);
 
         if(!exito){
@@ -53,7 +57,27 @@ public class HelloController {
         alert.showAndWait();
     }
 
+    @FXML
+    void handleRegister(ActionEvent event){
+        openRegistroWindow();
+    }
 
+    private void openAltaPlantaWindow(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministradorOpciones.fxml"));
+            AnchorPane pane = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Alta de plantas");
+            stage.setScene(new Scene(pane));
+            Stage currentStage = (Stage) txtUsername.getScene().getWindow();
+            currentStage.close();
+            stage.close();
+            stage.show();
+
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
 
 
 }
