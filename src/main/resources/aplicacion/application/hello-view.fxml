@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="899.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="899.0" xmlns="http://javafx.com/javafx/23.0.1"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.HelloController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="601.0" stroke="BLACK" strokeType="INSIDE" width="905.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#faf3e0" height="571.0" layoutX="464.0" layoutY="16.0" stroke="#faf3e0" strokeType="INSIDE" width="397.0" />
@@ -20,14 +20,14 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="487.0" layoutY="218.0" prefHeight="25.0" prefWidth="323.0" />
+      <TextField fx:id="txtUsername" layoutX="487.0" layoutY="218.0" prefHeight="25.0" prefWidth="323.0" />
       <Label layoutX="487.0" layoutY="271.0" text="Contraseña:">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <PasswordField layoutX="487.0" layoutY="329.0" prefHeight="25.0" prefWidth="323.0" />
-      <Button layoutX="591.0" layoutY="402.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="144.0" style="-fx-background-color: Green;" text="Iniciar sesión" textFill="WHITE">
+      <PasswordField fx:id="txtPassword" layoutX="487.0" layoutY="329.0" prefHeight="25.0" prefWidth="323.0" />
+      <Button layoutX="591.0" layoutY="402.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="144.0" style="-fx-background-color: Green;" text="Iniciar sesión" textFill="WHITE" onAction="#handleLogin">
          <font>
             <Font size="16.0" />
          </font>

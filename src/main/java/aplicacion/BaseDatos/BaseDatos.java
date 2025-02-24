@@ -1,6 +1,9 @@
 package aplicacion.BaseDatos;
 
+import Controles.AltaPlantasController;
+
 import java.sql.*;
+import java.util.ArrayList;
 
 public class BaseDatos {
     private static Connection con;
@@ -91,10 +94,33 @@ public class BaseDatos {
         }
     }
 
+  /*  public ArrayList<AltaPlantasController.Planta> obtenerPlantas(){
+        ArrayList<AltaPlantasController.Planta> plantas = new ArrayList<>();
+        try{
+            consulta = con.createStatement();
+            resultado = consulta.executeQuery(Select * from Planta);
+            while(resultado.next()){
+                AltaPlantasController.Planta planta = new AltaPlantasController.Planta(
+                        resultado.getString("Nombre"),
+                        resultado.getString("Descripcion"),
+                        resultado.getString("nombreCientifico"),
+                        resultado.getString("Propiedades"),
+                        resultado.getString("efectosAdversos")
+                );
+                plantas.add(planta);
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        return plantas;
+    }*/
+
+
     public void modificar_Plantas(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos){
         PreparedStatement ps = null;
         try{
-            ps = con.prepareStatement(Agregar_Planta);
+            String query ="update Planta set Nombre = ?, Descripcion = ?, nombreCientifico = ?, propiedades = ?, efectosAdversos = ?";
+            ps = con.prepareStatement(query);
             ps.setString(1, nombre);
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
@@ -106,4 +132,19 @@ public class BaseDatos {
         }
     }
 
+    public boolean eliminar_planta(String nombre, String descripcion, String nombreCientifico, String Propiedades, String efectosAdversos){
+        try{
+            PreparedStatement ps = con.prepareStatement("delete from Planta where nombre = ?");
+            ps.setString(1, nombre);
+            ps.executeUpdate();
+            System.out.println("planta eliminada");
+            return true;
+
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+
 }
+
