@@ -1,11 +1,12 @@
-module aplicacion.inventario_plantas {
+module aplicacion.application {
     requires javafx.controls;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
-    opens aplicacion.inventario_plantas to javafx.fxml;
-    exports aplicacion.inventario_plantas;
+    opens aplicacion.application to javafx.fxml;
+    exports aplicacion.application;
 }

@@ -1,4 +1,4 @@
-package aplicacion.inventario_plantas;
+package aplicacion.application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
