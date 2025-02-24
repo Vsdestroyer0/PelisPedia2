@@ -9,8 +9,6 @@ module aplicacion.application {
 
     opens aplicacion.application to javafx.fxml;
     exports aplicacion.application;
-    exports aplicacion.Controles;
-    opens aplicacion.Controles to javafx.fxml;
     exports Controles;
     opens Controles to javafx.fxml;
 }

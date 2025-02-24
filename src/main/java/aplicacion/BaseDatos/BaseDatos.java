@@ -16,7 +16,7 @@ public class BaseDatos {
 
     public BaseDatos() {
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/PvZ)", "Plantera", "1234");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/PvZ", "Plantera", "1234");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
