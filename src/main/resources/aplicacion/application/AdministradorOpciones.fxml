@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplicacion.application.AdministradorOpciones">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AltaPlantasController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="600.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
       <Button layoutX="890.0" layoutY="275.0" mnemonicParsing="false" style="-fx-background-color: lime;" text="Agregar" />

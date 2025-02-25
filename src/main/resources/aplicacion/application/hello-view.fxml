@@ -31,7 +31,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="505.0" layoutY="501.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Crear usuario" textFill="WHITE">
+      <Button layoutX="505.0" layoutY="501.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Crear usuario" textFill="WHITE" onAction="#handleRegister">
          <font>
             <Font size="16.0" />
          </font>

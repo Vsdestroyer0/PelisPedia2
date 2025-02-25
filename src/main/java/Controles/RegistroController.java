@@ -26,9 +26,7 @@ public class RegistroController {
 
     BaseDatos BD = new BaseDatos();
 
-    @FXML
-    public void initialize() {
-    }
+
 
     @FXML
     public void handleRegister(ActionEvent event){

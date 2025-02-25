@@ -19,14 +19,14 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <TextField layoutX="487.0" layoutY="159.0" prefHeight="25.0" prefWidth="323.0" />
+        <TextField layoutX="487.0" layoutY="159.0" prefHeight="25.0" prefWidth="323.0" fx:id="txtUsername"  />
         <Label layoutX="487.0" layoutY="200.0" text="Contraseña:">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <PasswordField layoutX="487.0" layoutY="230.0" prefHeight="25.0" prefWidth="323.0" />
-        <Button layoutX="505.0" layoutY="501.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Crear usuario" textFill="WHITE">
+        <PasswordField layoutX="487.0" layoutY="230.0" prefHeight="25.0" prefWidth="323.0" fx:id="txtPassword"/>
+        <Button layoutX="505.0" layoutY="501.0" mnemonicParsing="false" style="-fx-background-color: green;"  text="Crear usuario" textFill="WHITE" >
             <font>
                 <Font size="16.0" />
             </font>

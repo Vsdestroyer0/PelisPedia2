@@ -78,7 +78,7 @@ public class BaseDatos {
         } return false;
     }
 
-    public void AgregarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos){
+    public boolean agregarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos){
         PreparedStatement ps = null;
         try{
             ps = con.prepareStatement(Agregar_Planta);
@@ -92,13 +92,14 @@ public class BaseDatos {
         } catch (Exception e){
             System.out.println(e);
         }
+        return false;
     }
 
-  /*  public ArrayList<AltaPlantasController.Planta> obtenerPlantas(){
+   public ArrayList<AltaPlantasController.Planta> obtenerPlantas(){
         ArrayList<AltaPlantasController.Planta> plantas = new ArrayList<>();
         try{
             consulta = con.createStatement();
-            resultado = consulta.executeQuery(Select * from Planta);
+            resultado = consulta.executeQuery("SELECT * FROM Planta");
             while(resultado.next()){
                 AltaPlantasController.Planta planta = new AltaPlantasController.Planta(
                         resultado.getString("Nombre"),
@@ -113,10 +114,10 @@ public class BaseDatos {
             System.out.println(e);
         }
         return plantas;
-    }*/
+    }
 
 
-    public void modificar_Plantas(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos){
+    public boolean modificarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos, String efectosSecundarios){
         PreparedStatement ps = null;
         try{
             String query ="update Planta set Nombre = ?, Descripcion = ?, nombreCientifico = ?, propiedades = ?, efectosAdversos = ?";
@@ -130,9 +131,10 @@ public class BaseDatos {
         }catch (Exception e){
             System.out.println(e);
         }
+        return false;
     }
 
-    public boolean eliminar_planta(String nombre, String descripcion, String nombreCientifico, String Propiedades, String efectosAdversos){
+    public boolean eliminarPlanta(String nombre){
         try{
             PreparedStatement ps = con.prepareStatement("delete from Planta where nombre = ?");
             ps.setString(1, nombre);

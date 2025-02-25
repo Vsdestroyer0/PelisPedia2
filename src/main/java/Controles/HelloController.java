@@ -1,6 +1,7 @@
 package Controles;
 
 import aplicacion.BaseDatos.BaseDatos;
+import aplicacion.application.HelloApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +23,7 @@ public class HelloController {
 
     BaseDatos BD = new BaseDatos();
 
-    //@Override
+
     public void initialize(URL location, ResourceBundle resources) {
     }
 
@@ -64,7 +65,7 @@ public class HelloController {
 
     private void openAltaPlantaWindow(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministradorOpciones.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/AdministradorOpciones.fxml"));
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Alta de plantas");
@@ -82,7 +83,7 @@ public class HelloController {
     @FXML
     private void openUsuarioWindow(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/PanelUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/PanelUsuario.fxml"));
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Panel usuario");
@@ -98,7 +99,7 @@ public class HelloController {
     @FXML
     private void openRegistroWindow(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CrearCuenta.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("CrearCuenta.fxml"));
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Registro usuarios");
