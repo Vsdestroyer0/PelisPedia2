@@ -79,5 +79,38 @@ public class HelloController {
         }
     }
 
+    @FXML
+    private void openUsuarioWindow(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/PanelUsuario.fxml"));
+            AnchorPane pane = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Panel usuario");
+            stage.setScene(new Scene(pane));
+            Stage currentStage =(Stage) txtUsername.getScene().getWindow();
+            currentStage.close();
+            stage.show();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    @FXML
+    private void openRegistroWindow(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CrearCuenta.fxml"));
+            AnchorPane pane = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Registro usuarios");
+            stage.setScene(new Scene(pane));
+            stage.show();
+            stage = (Stage) txtUsername.getScene().getWindow();
+            stage.close();
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+
 
 }
