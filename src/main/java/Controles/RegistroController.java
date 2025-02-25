@@ -1,6 +1,7 @@
 package Controles;
 
 import aplicacion.BaseDatos.BaseDatos;
+import aplicacion.application.HelloApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,7 +61,7 @@ public class RegistroController {
 
     private void openLoginWindow(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/hello-viwe.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Login");
