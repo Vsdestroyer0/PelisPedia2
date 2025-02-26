@@ -1,18 +1,18 @@
 package Controles;
 
 
-import aplicacion.BaseDatos.BaseDatos;
+import aplicacion.application.HelloApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -23,8 +23,7 @@ public class AltaPlantasController {
 
     aplicacion.BaseDatos.BaseDatos baseDatos = new aplicacion.BaseDatos.BaseDatos();
 
-    @FXML
-    private TextField txtNombrePlanta;
+
 
     @FXML
     private TableView<Planta> tablePlantas;
@@ -46,6 +45,9 @@ public class AltaPlantasController {
 
     @FXML
     private ObservableList<Planta> plantasList;
+
+    @FXML
+    private TextField txtNombrePlanta;
 
     @FXML
     private TextArea txtDescripcion;
@@ -81,6 +83,7 @@ public class AltaPlantasController {
             }
         });
     }
+
 
     @FXML
     void handleAltaPlanta(ActionEvent event) {
@@ -226,6 +229,8 @@ public class AltaPlantasController {
         }
     }
 
+
+
     @FXML
     void handleCerrarSesion(ActionEvent event){
         openLoginWindow();
@@ -233,15 +238,18 @@ public class AltaPlantasController {
     }
 
     private void openLoginWindow() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
-            AnchorPane pane = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Login");
-            stage.setScene(new Scene(pane));
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/flor.png")));
-            stage.show();
+        try{
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/aplicacion/application/PanelUsuario.fxml")
+            );
+            Parent root = loader.load();
+
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Panel de Usuario");
+            newStage.show();
         } catch (IOException e) {
+            System.err.println("Error cargando FXML: " + e.getMessage());
             e.printStackTrace();
         }
     }

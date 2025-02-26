@@ -5,6 +5,8 @@ import Controles.AltaPlantasController;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static java.sql.DriverManager.getConnection;
+
 public class BaseDatos {
     private static Connection con;
 
@@ -16,7 +18,7 @@ public class BaseDatos {
 
     public BaseDatos() {
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/PvZ", "Plantera", "1234");
+            con = getConnection("jdbc:mysql://localhost:3306/PvZ", "Plantera", "1234");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -25,7 +27,7 @@ public class BaseDatos {
     public Boolean conectar(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/PvZ)", "Plantera", "1234");
+            Connection con = getConnection("jdbc:mysql://localhost:3306/PvZ)", "Plantera", "1234");
             Statement stmt = con.createStatement();
 
             ResultSet rs = stmt.executeQuery("Select * from usuarios");
@@ -78,7 +80,7 @@ public class BaseDatos {
         } return false;
     }
 
-    public boolean agregarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos){
+    public boolean agregarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios){
         PreparedStatement ps = null;
         try{
             ps = con.prepareStatement(Agregar_Planta);
@@ -86,13 +88,15 @@ public class BaseDatos {
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
             ps.setString(4, propiedades);
-            ps.setString(5, efectosAdversos);
-            ps.executeUpdate();
+            ps.setString(5, efectosSecundarios);
             System.out.println("Planta agregada");
+            int rows = ps.executeUpdate();
+            return rows > 0;
         } catch (Exception e){
             System.out.println(e);
+            return false;
+
         }
-        return false;
     }
 
    public ArrayList<AltaPlantasController.Planta> obtenerPlantas(){
@@ -106,7 +110,7 @@ public class BaseDatos {
                         resultado.getString("Descripcion"),
                         resultado.getString("nombreCientifico"),
                         resultado.getString("Propiedades"),
-                        resultado.getString("efectosAdversos")
+                        resultado.getString("efectosSecundarios")
                 );
                 plantas.add(planta);
             }
@@ -117,21 +121,24 @@ public class BaseDatos {
     }
 
 
-    public boolean modificarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosAdversos, String efectosSecundarios){
+    public boolean modificarPlanta(String oldNombre, String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios) {
         PreparedStatement ps = null;
-        try{
-            String query ="update Planta set Nombre = ?, Descripcion = ?, nombreCientifico = ?, propiedades = ?, efectosAdversos = ?";
+        try {
+            String query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, Propiedades = ?, EfectosSecundarios = ? WHERE Nombre = ?";
             ps = con.prepareStatement(query);
             ps.setString(1, nombre);
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
             ps.setString(4, propiedades);
-            ps.setString(5, efectosAdversos);
-            System.out.println("Se ha modificado una planta");
-        }catch (Exception e){
+            ps.setString(5, efectosSecundarios);
+            ps.setString(6, oldNombre);
+            ps.executeUpdate();
+            System.out.println("Planta modificada");
+            return true;
+        } catch (Exception e) {
             System.out.println(e);
+            return false;
         }
-        return false;
     }
 
     public boolean eliminarPlanta(String nombre){

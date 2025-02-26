@@ -23,13 +23,13 @@
       </Label>
       <TextField layoutX="279.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" />
       <Button layoutX="666.0" layoutY="56.0" mnemonicParsing="false" text="Button" />
-      <TableView layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0">
+      <TableView layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0" fx:id="tablePlantas">
         <columns>
-          <TableColumn prefWidth="118.0" text="Nombre" />
-          <TableColumn prefWidth="128.0" text="Descripción" />
-            <TableColumn prefWidth="117.0" text="nombreCientifico" />
-            <TableColumn minWidth="9.0" prefWidth="126.0" text="propiedades" />
-            <TableColumn prefWidth="185.0" text="Efectos secundarios" />
+          <TableColumn prefWidth="118.0" text="Nombre" fx:id="colNombrePlanta"/>
+          <TableColumn prefWidth="128.0" text="Descripción" fx:id="colDescripcionPlanta" />
+            <TableColumn prefWidth="117.0" text="nombreCientifico" fx:id="colNombreCientifico"/>
+            <TableColumn minWidth="9.0" prefWidth="126.0" text="propiedades" fx:id="colPropiedades"/>
+            <TableColumn prefWidth="185.0" text="Efectos secundarios" fx:id="colEfectosSecundarios" />
         </columns>
       </TableView>
       <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="18.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
@@ -37,7 +37,7 @@
             <Image url="@../Imgs/ImagenUser.png" />
          </image>
       </ImageView>
-      <Button layoutX="36.0" layoutY="523.0" mnemonicParsing="false">
+      <Button layoutX="36.0" layoutY="523.0" mnemonicParsing="false" onAction="#handleCerrarSesion" >
          <graphic>
             <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                <image>
