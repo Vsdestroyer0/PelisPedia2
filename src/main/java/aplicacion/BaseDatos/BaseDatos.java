@@ -55,6 +55,8 @@ public class BaseDatos {
         }
     }
 
+
+
     public boolean validar_Usuario(String username, String password){
         try{
             consulta = con.createStatement();
@@ -119,6 +121,11 @@ public class BaseDatos {
         }
         return plantas;
     }
+
+    /*public ArrayList<Planta> busquedaPlantas(){
+        ArrayList<Planta> plantas = new Arraylist<>();
+
+    }*/
 
 
     public boolean modificarPlanta(String oldNombre, String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios) {

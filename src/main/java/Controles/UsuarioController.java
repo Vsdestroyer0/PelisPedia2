@@ -1,6 +1,7 @@
 package Controles;
 
 import aplicacion.BaseDatos.BaseDatos;
+import aplicacion.application.HelloApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -61,16 +62,16 @@ public class UsuarioController {
     }
 
     private void openLoginWindow() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        try{
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Login");
             stage.setScene(new Scene(pane));
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/flor.png")));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,4 +82,18 @@ public class UsuarioController {
             plantasList.addAll(plantas);
         }
     }
+
+    /*@FXML
+    void handleBuscar(ActionEvent event){
+        String busqueda = txtBusqueda.getText();
+        busquedaPlantas();
+    }
+
+    @FXML
+    public void obtenerPlantasBusqueda(){
+    plantasList.clear()
+
+    if (
+    }*/
+
 }

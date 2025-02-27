@@ -85,6 +85,7 @@ public class AltaPlantasController {
     }
 
 
+
     @FXML
     void handleAltaPlanta(ActionEvent event) {
         String nombre = txtNombrePlanta.getText();
@@ -240,7 +241,7 @@ public class AltaPlantasController {
     private void openLoginWindow() {
         try{
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/aplicacion/application/PanelUsuario.fxml")
+                    getClass().getResource("/aplicacion/application/hello-view.fxml")
             );
             Parent root = loader.load();
 
