@@ -16,12 +16,12 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2b7c5a" height="40.0" layoutX="124.0" layoutY="-4.0" stroke="BLACK" strokeType="INSIDE" width="877.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#faf3e0" height="600.0" stroke="BLACK" strokeType="INSIDE" width="124.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="582.0" layoutX="124.0" layoutY="19.0" stroke="BLACK" strokeType="INSIDE" width="877.0" />
-      <Label layoutX="203.0" layoutY="53.0" text="Busqueda" fx:id="txtBusqueda">
+      <Label layoutX="203.0" layoutY="53.0" text="Busqueda" >
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="279.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" onAction="handleBuscar"/>
+      <TextField layoutX="279.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" />
       <Button layoutX="666.0" layoutY="56.0" mnemonicParsing="false" text="Buscar"  />
       <TableView layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0" fx:id="tablePlantas">
         <columns>

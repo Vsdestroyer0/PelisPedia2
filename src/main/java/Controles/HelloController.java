@@ -88,9 +88,7 @@ public class HelloController {
     @FXML
     private void openUsuarioWindow(){
         try{
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/aplicacion/application/PanelUsuario.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("PanelUsuario.fxml"));
             Parent root = loader.load();
 
             Stage newStage = new Stage();
