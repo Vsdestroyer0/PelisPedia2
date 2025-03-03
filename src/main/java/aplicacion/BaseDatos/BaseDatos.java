@@ -14,15 +14,18 @@ public class BaseDatos {
     private static ResultSet resultado;
 
     private final String Agregar_Usuario = "insert into Usuario (Nombre, Contraseña, Imagen, esAdmin) values (?,?,?,?)";
-    private final String Agregar_Planta = "insert into Planta (Nombre, Descripcion, NombreCientifico, Propiedades, EfectosSecundarios) values (?,?,?,?,?)";
+    private final String Agregar_Planta = "INSERT INTO Planta (Nombre, Descripcion, NombreCientifico, Propiedades, EfectosSecundarios, Imagen) VALUES (?,?,?,?,?,?)";
+
 
     public BaseDatos() {
-        try{
-            con = getConnection("jdbc:mysql://localhost:3306/PvZ", "Plantera", "1234");
+        try {
+            String url = "jdbc:mysql://localhost:3306/PvZ?useSSL=false&allowPublicKeyRetrieval=true";
+            con = DriverManager.getConnection(url, "Plantera", "1234");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error de conexión: " + e.getMessage());
         }
     }
+
 
     public Boolean conectar(){
         try{
@@ -82,68 +85,74 @@ public class BaseDatos {
         } return false;
     }
 
-    public boolean agregarPlanta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios){
-        PreparedStatement ps = null;
-        try{
-            ps = con.prepareStatement(Agregar_Planta);
+    public boolean agregarPlanta(String nombre, String descripcion, String nombreCientifico,
+                                 String propiedades, String efectosSecundarios, byte[] imagen) {
+
+        try (PreparedStatement ps = con.prepareStatement(Agregar_Planta)) {
             ps.setString(1, nombre);
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
             ps.setString(4, propiedades);
             ps.setString(5, efectosSecundarios);
-            System.out.println("Planta agregada");
-            int rows = ps.executeUpdate();
-            return rows > 0;
-        } catch (Exception e){
-            System.out.println(e);
-            return false;
+            ps.setBytes(6, imagen);
 
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al agregar planta: " + e.getMessage());
+            return false;
         }
     }
 
-   public ArrayList<AltaPlantasController.Planta> obtenerPlantas(){
+    public ArrayList<AltaPlantasController.Planta> obtenerPlantas() {
         ArrayList<AltaPlantasController.Planta> plantas = new ArrayList<>();
-        try{
-            consulta = con.createStatement();
-            resultado = consulta.executeQuery("SELECT * FROM Planta");
-            while(resultado.next()){
-                AltaPlantasController.Planta planta = new AltaPlantasController.Planta(
-                        resultado.getString("Nombre"),
-                        resultado.getString("Descripcion"),
-                        resultado.getString("nombreCientifico"),
-                        resultado.getString("Propiedades"),
-                        resultado.getString("efectosSecundarios")
-                );
-                plantas.add(planta);
+        String query = "SELECT Nombre, Descripcion, NombreCientifico, Propiedades, EfectosSecundarios, Imagen FROM Planta";
+
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while(rs.next()) {
+                Blob blob = rs.getBlob("Imagen");
+                byte[] imagenBytes = null;
+
+                if(blob != null) {
+                    imagenBytes = blob.getBytes(1, (int) blob.length());
+                    blob.free();
+                }
+
+                plantas.add(new AltaPlantasController.Planta(
+                        rs.getString("Nombre"),
+                        rs.getString("Descripcion"),
+                        rs.getString("NombreCientifico"),
+                        rs.getString("Propiedades"),
+                        rs.getString("EfectosSecundarios"),
+                        imagenBytes
+                ));
             }
-        } catch (Exception e){
-            System.out.println(e);
+        } catch (Exception e) {
+            System.err.println("Error al obtener plantas: " + e.getMessage());
         }
         return plantas;
     }
 
-    /*public ArrayList<Planta> busquedaPlantas(){
-        ArrayList<Planta> plantas = new Arraylist<>();
-
-    }*/
 
 
-    public boolean modificarPlanta(String oldNombre, String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios) {
-        PreparedStatement ps = null;
-        try {
-            String query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, Propiedades = ?, EfectosSecundarios = ? WHERE Nombre = ?";
-            ps = con.prepareStatement(query);
+    public boolean modificarPlanta(String oldNombre, String nombre, String descripcion,
+                                   String nombreCientifico, String propiedades,
+                                   String efectosSecundarios, byte[] imagen) {
+        String query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, " +
+                "Propiedades = ?, EfectosSecundarios = ?, Imagen = ? WHERE Nombre = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, nombre);
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
             ps.setString(4, propiedades);
             ps.setString(5, efectosSecundarios);
-            ps.setString(6, oldNombre);
-            ps.executeUpdate();
-            System.out.println("Planta modificada");
-            return true;
-        } catch (Exception e) {
-            System.out.println(e);
+            ps.setBytes(6, imagen);
+            ps.setString(7, oldNombre);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }

@@ -16,20 +16,20 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2b7c5a" height="40.0" layoutX="124.0" layoutY="-4.0" stroke="BLACK" strokeType="INSIDE" width="877.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#faf3e0" height="600.0" stroke="BLACK" strokeType="INSIDE" width="124.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="582.0" layoutX="124.0" layoutY="19.0" stroke="BLACK" strokeType="INSIDE" width="877.0" />
-      <Label layoutX="203.0" layoutY="53.0" text="Busqueda" >
+      <Label layoutX="231.0" layoutY="54.0" prefHeight="30.0" prefWidth="87.0" text="Buscar:">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="279.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" />
-      <Button layoutX="666.0" layoutY="56.0" mnemonicParsing="false" text="Buscar"  />
-      <TableView layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0" fx:id="tablePlantas">
+      <TextField fx:id="txtBusqueda" layoutX="378.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" />
+      <TableView fx:id="tablePlantas" layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0">
         <columns>
-          <TableColumn prefWidth="118.0" text="Nombre" fx:id="colNombrePlanta"/>
-          <TableColumn prefWidth="128.0" text="Descripción" fx:id="colDescripcionPlanta" />
-            <TableColumn prefWidth="117.0" text="nombreCientifico" fx:id="colNombreCientifico"/>
-            <TableColumn minWidth="9.0" prefWidth="126.0" text="propiedades" fx:id="colPropiedades"/>
-            <TableColumn prefWidth="185.0" text="Efectos secundarios" fx:id="colEfectosSecundarios" />
+            <TableColumn fx:id="colNombrePlanta1" prefWidth="118.0" text="Imagen" />
+          <TableColumn fx:id="colNombrePlanta" prefWidth="118.0" text="Nombre" />
+          <TableColumn fx:id="colDescripcionPlanta" prefWidth="128.0" text="Descripción" />
+            <TableColumn fx:id="colNombreCientifico" prefWidth="117.0" text="nombreCientifico" />
+            <TableColumn fx:id="colPropiedades" minWidth="9.0" prefWidth="78.0" text="propiedades" />
+            <TableColumn fx:id="colEfectosSecundarios" prefWidth="115.0" text="Efectos secundarios" />
         </columns>
       </TableView>
       <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="18.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
@@ -37,7 +37,7 @@
             <Image url="@../Imgs/ImagenUser.png" />
          </image>
       </ImageView>
-      <Button layoutX="36.0" layoutY="523.0" mnemonicParsing="false" onAction="#handleCerrarSesion" >
+      <Button layoutX="36.0" layoutY="523.0" mnemonicParsing="false" onAction="#handleCerrarSesion">
          <graphic>
             <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                <image>

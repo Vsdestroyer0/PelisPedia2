@@ -19,11 +19,12 @@
       <Button layoutX="890.0" layoutY="367.0" mnemonicParsing="false" onAction="#handleEliminarPlanta" style="-fx-background-color: Salmon;" text="Eliminar" />
       <TableView fx:id="tablePlantas" layoutX="33.0" layoutY="248.0" prefHeight="308.0" prefWidth="818.0">
         <columns>
-          <TableColumn fx:id="colNombrePlanta" prefWidth="75.0" text="Nombre" />
-          <TableColumn fx:id="colDescripcionPlanta" prefWidth="245.0" text="Descripcion" />
+            <TableColumn fx:id="colImagen" prefWidth="97.0" text="Imagen"  />
+            <TableColumn fx:id="colNombrePlanta" prefWidth="141.0" text="Nombre" />
+            <TableColumn fx:id="colDescripcionPlanta" prefWidth="157.0" text="Descripcion" />
             <TableColumn fx:id="colNombreCientifico" prefWidth="128.0" text="Nombre científico" />
-            <TableColumn fx:id="colPropiedades" minWidth="0.0" prefWidth="183.0" text="Propiedades" />
-            <TableColumn fx:id="colEfectosSecundarios" prefWidth="186.0" text="Efectos secundarios" />
+            <TableColumn fx:id="colPropiedades" minWidth="0.0" prefWidth="159.0" text="Propiedades" />
+            <TableColumn fx:id="colEfectosSecundarios" prefWidth="135.0" text="Efectos secundarios" />
         </columns>
       </TableView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="39.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
@@ -51,5 +52,9 @@
       <TextField fx:id="txtNombreCientifico" layoutX="649.0" layoutY="55.0" prefHeight="25.0" prefWidth="241.0" />
       <Label layoutX="533.0" layoutY="119.0" text="Propiedades" />
       <TextArea fx:id="txtPropiedades" layoutX="649.0" layoutY="98.0" prefHeight="59.0" prefWidth="241.0" />
+      <Label layoutX="533.0" layoutY="197.0" text="Selecciona imagen" />
+      <Button fx:id="btnFileChooser" layoutX="649.0" layoutY="193.0" mnemonicParsing="false" onAction="#Filechooser" text="Seleccionar" />
+      <ImageView fx:id="imgPreview" fitHeight="70.0" fitWidth="104.0" layoutX="782.0" layoutY="171.0" preserveRatio="true" />
+
    </children>
 </AnchorPane>
