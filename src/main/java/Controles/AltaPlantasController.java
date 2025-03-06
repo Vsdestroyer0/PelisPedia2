@@ -239,11 +239,28 @@ public class AltaPlantasController {
             String propiedades = txtPropiedades.getText();
             String efectosSecundarios = txtEfecSecundarios.getText();
 
+            // Verificar que los campos obligatorios no estén vacíos
+            if (nombre.isEmpty() || descripcion.isEmpty() || nombreCientifico.isEmpty() || propiedades.isEmpty() || efectosSecundarios.isEmpty()) {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor, complete todos los campos obligatorios.");
+                alert.showAndWait();
+                return;
+            }
+
+            // Si no se selecciona una nueva imagen, mantener la imagen existente
+            if (currentImageBytes == null) {
+                currentImageBytes = selectedPlanta.imagenProperty().get();
+            }
+
             // Lógica para modificar la planta, incluyendo la imagen
             if (baseDatos.modificarPlanta(selectedPlanta.getNombre(), nombre, descripcion,
                     nombreCientifico, propiedades, efectosSecundarios,
                     currentImageBytes)) {
-                baseDatos.obtenerPlantas();
+                plantasList.setAll(baseDatos.obtenerPlantas()); // Recargar toda la lista
+                tablePlantas.refresh(); // Refrescar la tabla para mostrar los cambios
+
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Éxito");
                 alert.setHeaderText(null);

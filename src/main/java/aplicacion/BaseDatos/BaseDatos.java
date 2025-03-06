@@ -26,23 +26,6 @@ public class BaseDatos {
         }
     }
 
-
-    public Boolean conectar(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            Connection con = getConnection("jdbc:mysql://localhost:3306/PvZ)", "Plantera", "1234");
-            Statement stmt = con.createStatement();
-
-            ResultSet rs = stmt.executeQuery("Select * from usuarios");
-            while (rs.next())
-                System.out.println("Existe Algo en BD");
-        }catch (Exception e){
-            System.out.println(e);
-            return false;
-        }
-        return true;
-    }
-
     public void AgregarUsuario(String username, String password, Boolean tipoUsuario){
         PreparedStatement ps = null;
         try{
@@ -136,21 +119,30 @@ public class BaseDatos {
 
 
 
-    public boolean modificarPlanta(String oldNombre, String nombre, String descripcion,
-                                   String nombreCientifico, String propiedades,
-                                   String efectosSecundarios, byte[] imagen) {
-        String query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, " +
-                "Propiedades = ?, EfectosSecundarios = ?, Imagen = ? WHERE Nombre = ?";
+    public boolean modificarPlanta(String oldNombre, String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios, byte[] imagen) {
+        String query;
+        if (imagen != null) {
+            query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, Propiedades = ?, EfectosSecundarios = ?, Imagen = ? WHERE Nombre = ?";
+        } else {
+            query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, Propiedades = ?, EfectosSecundarios = ? WHERE Nombre = ?";
+        }
+
         try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, nombre);
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
             ps.setString(4, propiedades);
             ps.setString(5, efectosSecundarios);
-            ps.setBytes(6, imagen);
-            ps.setString(7, oldNombre);
+
+            if (imagen != null) {
+                ps.setBytes(6, imagen);
+                ps.setString(7, oldNombre);
+            } else {
+                ps.setString(6, oldNombre);
+            }
 
             return ps.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
