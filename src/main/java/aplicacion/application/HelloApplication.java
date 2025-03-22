@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
-        stage.setTitle("Login a Naturalia");
+        stage.setTitle("Bienvenido a PelisPedia");
         stage.setScene(scene);
         stage.show();
 

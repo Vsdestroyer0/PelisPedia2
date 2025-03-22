@@ -1,7 +1,5 @@
 package aplicacion.BaseDatos;
 
-import Controles.AltaPlantasController;
-
 import java.sql.*;
 import java.util.ArrayList;
 
