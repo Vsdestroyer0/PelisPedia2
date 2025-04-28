@@ -1,6 +1,6 @@
 package Controles;
 
-import aplicacion.BaseDatos.BaseDatos;
+import aplicacion.BaseDatos.DatabaseConnection;
 import aplicacion.application.HelloApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,36 +26,36 @@ import java.util.Arrays;
 
 public class UsuarioController {
 
-    BaseDatos baseDatos = new BaseDatos();
+    DatabaseConnection databaseConnection = new DatabaseConnection();
 
     @FXML
-    private TableView<AltaPeliculasController.Planta> tablePlantas;
+    private TableView<AltaPeliculasController.Pelicula> tablePlantas;
 
     @FXML
-    private TableColumn<AltaPeliculasController.Planta, String> colNombrePlanta;
+    private TableColumn<AltaPeliculasController.Pelicula, String> colNombrePlanta;
 
     @FXML
-    private TableColumn<AltaPeliculasController.Planta, String> colDescripcionPlanta;
+    private TableColumn<AltaPeliculasController.Pelicula, String> colDescripcionPlanta;
 
     @FXML
-    private TableColumn<AltaPeliculasController.Planta, String> colNombreCientifico;
+    private TableColumn<AltaPeliculasController.Pelicula, String> colNombreCientifico;
 
     @FXML
-    private TableColumn<AltaPeliculasController.Planta, String> colPropiedades;
+    private TableColumn<AltaPeliculasController.Pelicula, String> colPropiedades;
 
     @FXML
-    private TableColumn<AltaPeliculasController.Planta, String> colEfectosSecundarios;
+    private TableColumn<AltaPeliculasController.Pelicula, String> colEfectosSecundarios;
 
     @FXML
-    private TableColumn<AltaPeliculasController.Planta, byte[]> colNombrePlanta1;
+    private TableColumn<AltaPeliculasController.Pelicula, byte[]> colNombrePlanta1;
 
     @FXML
-    private ObservableList<AltaPeliculasController.Planta> plantasList;
+    private ObservableList<AltaPeliculasController.Pelicula> plantasList;
 
     @FXML
     private TextField txtBusqueda;
 
-    private FilteredList<AltaPeliculasController.Planta> filteredPlantas;
+    private FilteredList<AltaPeliculasController.Pelicula> filteredPeliculas;
 
     @FXML
     public void initialize() {
@@ -78,8 +78,8 @@ public class UsuarioController {
         obtenerPeliculas();
 
         // Filtrado de plantas
-        filteredPlantas = new FilteredList<>(plantasList, p -> true);
-        tablePlantas.setItems(filteredPlantas);
+        filteredPeliculas = new FilteredList<>(plantasList, p -> true);
+        tablePlantas.setItems(filteredPeliculas);
 
         txtBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
             filtrarPeliculas();
@@ -166,22 +166,22 @@ public class UsuarioController {
     void filtrarPeliculas() {
         String filtro = txtBusqueda.getText().toLowerCase();
 
-        filteredPlantas.setPredicate(planta -> {
+        filteredPeliculas.setPredicate(pelicula -> {
             if (filtro.isEmpty()) return true;
 
-            return planta.getNombre().toLowerCase().contains(filtro) ||
-                    planta.getDescripcion().toLowerCase().contains(filtro) ||
-                    planta.getNombreCientifico().toLowerCase().contains(filtro) ||
-                    planta.getPropiedades().toLowerCase().contains(filtro) ||
-                    planta.getEfectosSecundarios().toLowerCase().contains(filtro);
+            return pelicula.getNombre().toLowerCase().contains(filtro) ||
+                    pelicula.getDescripcion().toLowerCase().contains(filtro) ||
+                    pelicula.getNombreCientifico().toLowerCase().contains(filtro) ||
+                    pelicula.getPropiedades().toLowerCase().contains(filtro) ||
+                    pelicula.getEfectosSecundarios().toLowerCase().contains(filtro);
         });
     }
 
     public void obtenerPeliculas() {
         plantasList.clear();
-        ArrayList<AltaPeliculasController.Planta> plantas = baseDatos.obtenerPeliculas();
-        if (plantas != null){
-            plantasList.addAll(plantas);
+        ArrayList<AltaPeliculasController.Pelicula> peliculas = databaseConnection.obtenerPeliculas();
+        if (peliculas != null){
+            plantasList.addAll(peliculas);
         }
     }
 

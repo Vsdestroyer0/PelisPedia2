@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AltaPlantasController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AltaPeliculasController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="600.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
-      <Button layoutX="890.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleAltaPlanta" style="-fx-background-color: lime;" text="Agregar" />
-      <Button layoutX="886.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleModificarPlanta" style="-fx-background-color: yellow;" text="Modificar" textAlignment="CENTER" />
-      <Button layoutX="890.0" layoutY="367.0" mnemonicParsing="false" onAction="#handleEliminarPlanta" style="-fx-background-color: Salmon;" text="Eliminar" />
-      <TableView fx:id="tablePlantas" layoutX="33.0" layoutY="248.0" prefHeight="308.0" prefWidth="818.0">
+      <Button layoutX="890.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleAltaPeliculas" style="-fx-background-color: lime;" text="Agregar" />
+      <Button layoutX="886.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleModificarPeliculas" style="-fx-background-color: yellow;" text="Modificar" textAlignment="CENTER" />
+      <Button layoutX="890.0" layoutY="367.0" mnemonicParsing="false" onAction="#handleEliminarPeliculas" style="-fx-background-color: Salmon;" text="Eliminar" />
+      <TableView fx:id="tablaPeliculas" layoutX="33.0" layoutY="248.0" prefHeight="308.0" prefWidth="818.0">
         <columns>
             <TableColumn fx:id="colImagen" prefWidth="97.0" text="Imagen"  />
             <TableColumn fx:id="colNombrePlanta" prefWidth="141.0" text="Nombre" />

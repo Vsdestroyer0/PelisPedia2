@@ -1,5 +1,6 @@
 package Controles;
 
+import aplicacion.BaseDatos.DatabaseConnection;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -22,29 +23,29 @@ import java.util.List;
 
 public class AltaPeliculasController {
 
-    aplicacion.BaseDatos.BaseDatos baseDatos = new aplicacion.BaseDatos.BaseDatos();
+    DatabaseConnection databaseConnection = new DatabaseConnection();
 
 
     @FXML
-    private TableView<Planta> tablePlantas;
+    private TableView<Pelicula> tablaPeliculas;
 
     @FXML
-    private TableColumn<Planta, String> colNombrePlanta;
+    private TableColumn<Pelicula, String> colNombrePlanta;
 
     @FXML
-    private TableColumn<Planta, String> colDescripcionPlanta;
+    private TableColumn<Pelicula, String> colDescripcionPlanta;
 
     @FXML
-    private TableColumn<Planta, String> colNombreCientifico;
+    private TableColumn<Pelicula, String> colNombreCientifico;
 
     @FXML
-    private TableColumn<Planta, String> colPropiedades;
+    private TableColumn<Pelicula, String> colPropiedades;
 
     @FXML
-    private TableColumn<Planta, String> colEfectosSecundarios;
+    private TableColumn<Pelicula, String> colEfectosSecundarios;
 
     @FXML
-    private ObservableList<Planta> plantasList;
+    private ObservableList<Pelicula> ListaPeliculas;
 
     @FXML
     private TextField txtNombrePlanta;
@@ -56,16 +57,13 @@ public class AltaPeliculasController {
     private TextField txtNombreCientifico;
 
     @FXML
-    private TableColumn<Planta, byte[]> colImagen;
+    private TableColumn<Pelicula, byte[]> colImagen;
 
     @FXML
     private TextArea txtPropiedades;
 
     @FXML
     private TextArea txtEfecSecundarios;
-
-    @FXML
-    private Button btnFileChooser;
 
     @FXML
     private ImageView imgPreview;
@@ -102,7 +100,7 @@ public class AltaPeliculasController {
     @FXML
     public void initialize() {
         // Inicializar la lista observable
-        plantasList = FXCollections.observableArrayList();
+        ListaPeliculas = FXCollections.observableArrayList();
 
         // 1. Configuración de columnas de texto
         colNombrePlanta.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -112,7 +110,7 @@ public class AltaPeliculasController {
         colEfectosSecundarios.setCellValueFactory(new PropertyValueFactory<>("efectosSecundarios"));
 
         // 2. Configuración columna de imagen (primera columna)
-        TableColumn<Planta, byte[]> colImagen = (TableColumn<Planta, byte[]>) tablePlantas.getColumns().get(0);
+        TableColumn<Pelicula, byte[]> colImagen = (TableColumn<Pelicula, byte[]>) tablaPeliculas.getColumns().get(0);
         colImagen.setCellValueFactory(cellData -> {
             byte[] imagenBytes = cellData.getValue().imagenProperty().get();
             return new SimpleObjectProperty<>(imagenBytes);
@@ -147,14 +145,14 @@ public class AltaPeliculasController {
 
         // 3. Cargar datos iniciales
         try {
-            List<Planta> plantasDesdeBD = baseDatos.obtenerPeliculas();
-            plantasList.addAll(plantasDesdeBD);
-            tablePlantas.setItems(plantasList);
+            List<Pelicula> peliculasDesdeBD = databaseConnection.obtenerPeliculas();
+            ListaPeliculas.addAll(peliculasDesdeBD);
+            tablaPeliculas.setItems(ListaPeliculas);
 
             // Log de diagnóstico
-            System.out.println("Plantas cargadas: " + plantasList.size());
-            if(!plantasList.isEmpty()) {
-                System.out.println("Ejemplo primera planta: " + plantasList.get(0).getNombre());
+            System.out.println("Plantas cargadas: " + ListaPeliculas.size());
+            if(!ListaPeliculas.isEmpty()) {
+                System.out.println("Ejemplo primera planta: " + ListaPeliculas.get(0).getNombre());
             }
         } catch (Exception e) {
             System.err.println("Error inicializando datos: " + e.getMessage());
@@ -162,29 +160,29 @@ public class AltaPeliculasController {
         }
 
         // 4. Configurar selección de fila
-        tablePlantas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        tablaPeliculas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 actualizarCamposDesdeSeleccion(newValue);
             }
         });
     }
 
-    private void actualizarCamposDesdeSeleccion(Planta planta) {
-        txtNombrePlanta.setText(planta.getNombre());
-        txtDescripcion.setText(planta.getDescripcion());
-        txtNombreCientifico.setText(planta.getNombreCientifico());
-        txtPropiedades.setText(planta.getPropiedades());
-        txtEfecSecundarios.setText(planta.getEfectosSecundarios());
+    private void actualizarCamposDesdeSeleccion(Pelicula pelicula) {
+        txtNombrePlanta.setText(pelicula.getNombre());
+        txtDescripcion.setText(pelicula.getDescripcion());
+        txtNombreCientifico.setText(pelicula.getNombreCientifico());
+        txtPropiedades.setText(pelicula.getPropiedades());
+        txtEfecSecundarios.setText(pelicula.getEfectosSecundarios());
 
         // Cargar imagen seleccionada
-        byte[] imagenBytes = planta.imagenProperty().get();
+        byte[] imagenBytes = pelicula.imagenProperty().get();
         if(imagenBytes != null && imagenBytes.length > 0) {
             imgPreview.setImage(new Image(new ByteArrayInputStream(imagenBytes)));
         }
     }
 
     @FXML
-    void handleAltaPlanta(ActionEvent event) {
+    void handleAltaPeliculas(ActionEvent event) {
         String nombre = txtNombrePlanta.getText();
         String descripcion = txtDescripcion.getText();
         String nombreCientifico = txtNombreCientifico.getText();
@@ -198,11 +196,11 @@ public class AltaPeliculasController {
         }
 
         // Lógica para agregar la planta
-        if (baseDatos.agregarPelicula(nombre, descripcion, nombreCientifico,
+        if (databaseConnection.agregarPelicula(nombre, descripcion, nombreCientifico,
                 propiedades, efectosSecundarios, currentImageBytes)) {
-            baseDatos.obtenerPeliculas();
-            plantasList.setAll(baseDatos.obtenerPeliculas()); // Recargar toda la lista
-            tablePlantas.refresh();
+            databaseConnection.obtenerPeliculas();
+            ListaPeliculas.setAll(databaseConnection.obtenerPeliculas()); // Recargar toda la lista
+            tablaPeliculas.refresh();
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Éxito");
             alert.setHeaderText(null);
@@ -230,9 +228,9 @@ public class AltaPeliculasController {
 
 
     @FXML
-    void handleModificarPlanta(ActionEvent event) {
-        Planta selectedPlanta = tablePlantas.getSelectionModel().getSelectedItem();
-        if (selectedPlanta != null) {
+    void handleModificarPeliculas(ActionEvent event) {
+        Pelicula selectedPelicula = tablaPeliculas.getSelectionModel().getSelectedItem();
+        if (selectedPelicula != null) {
             String nombre = txtNombrePlanta.getText();
             String descripcion = txtDescripcion.getText();
             String nombreCientifico = txtNombreCientifico.getText();
@@ -251,15 +249,15 @@ public class AltaPeliculasController {
 
             // Si no se selecciona una nueva imagen, mantener la imagen existente
             if (currentImageBytes == null) {
-                currentImageBytes = selectedPlanta.imagenProperty().get();
+                currentImageBytes = selectedPelicula.imagenProperty().get();
             }
 
             // Lógica para modificar la planta, incluyendo la imagen
-            if (baseDatos.modificarPeliculas(selectedPlanta.getNombre(), nombre, descripcion,
+            if (databaseConnection.modificarPeliculas(selectedPelicula.getNombre(), nombre, descripcion,
                     nombreCientifico, propiedades, efectosSecundarios,
                     currentImageBytes)) {
-                plantasList.setAll(baseDatos.obtenerPeliculas()); // Recargar toda la lista
-                tablePlantas.refresh(); // Refrescar la tabla para mostrar los cambios
+                ListaPeliculas.setAll(databaseConnection.obtenerPeliculas()); // Recargar toda la lista
+                tablaPeliculas.refresh(); // Refrescar la tabla para mostrar los cambios
 
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Éxito");
@@ -293,12 +291,12 @@ public class AltaPeliculasController {
 
 
     @FXML
-    void handleEliminarPlanta(ActionEvent event) {
-        Planta selectedPlanta = tablePlantas.getSelectionModel().getSelectedItem();
-        if (selectedPlanta != null) {
-            String nombrePlanta = selectedPlanta.getNombre();
-            if (baseDatos.eliminarPlanta(nombrePlanta)) {
-                plantasList.remove(selectedPlanta);
+    void handleEliminarPeliculas(ActionEvent event) {
+        Pelicula selectedPelicula = tablaPeliculas.getSelectionModel().getSelectedItem();
+        if (selectedPelicula != null) {
+            String nombrePlanta = selectedPelicula.getNombre();
+            if (databaseConnection.eliminarPlanta(nombrePlanta)) {
+                ListaPeliculas.remove(selectedPelicula);
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Éxito");
                 alert.setHeaderText(null);
@@ -350,7 +348,7 @@ public class AltaPeliculasController {
         }
     }
 
-    public static class Planta {
+    public static class Pelicula {
         private final String nombre;
         private String descripcion;
         private String nombreCientifico;
@@ -359,7 +357,7 @@ public class AltaPeliculasController {
         private final SimpleObjectProperty<byte[]> imagen = new SimpleObjectProperty<>();
 
 
-        public Planta(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios, byte[] imagen) {
+        public Pelicula(String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios, byte[] imagen) {
             this.nombre = nombre;
             this.descripcion = descripcion;
             this.nombreCientifico = nombreCientifico;
