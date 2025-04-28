@@ -1,20 +1,19 @@
-show databases;
+Create database PelisPedia;
 
-Create database PvZ;
+create user 'Cine'@'Localhost' identified by '1234';
 
-create user 'Plantera'@'Localhost' identified by '1234';
+Grant create, alter, drop, insert, update, delete, select, references on PelisPedia.* to 'Cine'@'Localhost';
 
-Grant create, alter, drop, insert, update, delete, select, references on pvz.* to 'Plantera'@'Localhost';
-
-Grant Create routine, alter routine on pvz.* to 'Plantera'@'LocalHost';
+Grant Create routine, alter routine on PelisPedia.* to 'Cine'@'LocalHost';
 set global log_bin_trust_function_creators = 1;
 
-grant trigger on pvz.* to 'Plantera'@'LocalHost';
+grant trigger on PelisPedia.* to 'Cine'@'LocalHost';
 
-grant index on pvz.* to 'Plantera'@'LocalHost';
+grant index on PelisPedia.* to 'Cine'@'LocalHost';
 
-GRANT ALL PRIVILEGES ON pvz.* TO 'Plantera'@'localhost';
+GRANT ALL PRIVILEGES ON PelisPedia.* TO 'Cine'@'localhost';
 
 FLUSH PRIVILEGES;
+
 
 

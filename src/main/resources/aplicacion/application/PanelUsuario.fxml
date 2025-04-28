@@ -13,9 +13,8 @@
 
 <AnchorPane prefHeight="602.0" prefWidth="1001.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.UsuarioController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2b7c5a" height="40.0" layoutX="124.0" layoutY="-4.0" stroke="BLACK" strokeType="INSIDE" width="877.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#faf3e0" height="600.0" stroke="BLACK" strokeType="INSIDE" width="124.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="582.0" layoutX="124.0" layoutY="19.0" stroke="BLACK" strokeType="INSIDE" width="877.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2b7c5a" height="40.0" layoutY="-4.0" stroke="BLACK" strokeType="INSIDE" width="1001.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="569.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" width="1001.0" />
       <Label layoutX="231.0" layoutY="54.0" prefHeight="30.0" prefWidth="87.0" text="Buscar:">
          <font>
             <Font size="20.0" />
@@ -33,13 +32,10 @@
         </columns>
       </TableView>
       <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="18.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Imgs/ImagenUser.png" />
-         </image>
       </ImageView>
-      <Button layoutX="36.0" layoutY="523.0" mnemonicParsing="false" onAction="#handleCerrarSesion">
+      <Button layoutX="920.0" layoutY="6.0" mnemonicParsing="false" onAction="#handleCerrarSesion" prefHeight="17.0" prefWidth="56.0">
          <graphic>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="14.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Imgs/ImagenSalida.png" />
                </image>

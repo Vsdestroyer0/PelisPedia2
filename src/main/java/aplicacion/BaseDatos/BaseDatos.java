@@ -1,5 +1,7 @@
 package aplicacion.BaseDatos;
 
+import Controles.AltaPeliculasController;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -11,27 +13,34 @@ public class BaseDatos {
     private static Statement consulta;
     private static ResultSet resultado;
 
-    private final String Agregar_Usuario = "insert into Usuario (Nombre, Contraseña, Imagen, esAdmin) values (?,?,?,?)";
-    private final String Agregar_Planta = "INSERT INTO Planta (Nombre, Descripcion, NombreCientifico, Propiedades, EfectosSecundarios, Imagen) VALUES (?,?,?,?,?,?)";
+    private final String Agregar_Usuario = "insert into Usuario (nombre, correo, contraseña, confirmarContraseña, preguntaSeguridad, respuestaSeguridad," +
+            "                               direccion, esAdmin) values (?,?,?,?,?,?,?,?)";
+
+    private final String Agregar_Pelicula = "INSERT INTO peliculasGeneral (nombre, Descripcion, NombreCientifico, Propiedades, EfectosSecundarios, Imagen) VALUES (?,?,?,?,?,?)";
 
 
     public BaseDatos() {
         try {
-            String url = "jdbc:mysql://localhost:3306/PvZ?useSSL=false&allowPublicKeyRetrieval=true";
-            con = DriverManager.getConnection(url, "Plantera", "1234");
+            String url = "jdbc:mysql://localhost:3306/PelisPedia?useSSL=false&allowPublicKeyRetrieval=true";
+            con = DriverManager.getConnection(url, "Cine", "1234");
         } catch (SQLException e) {
             throw new RuntimeException("Error de conexión: " + e.getMessage());
         }
     }
 
-    public void AgregarUsuario(String username, String password, Boolean tipoUsuario){
+    public void AgregarUsuario(String nombre, String correo, String password, String confPass, String preguntaSeg, String respuestaSeg,
+                                    String direccion, Boolean tipoUsuario){
         PreparedStatement ps = null;
         try{
             ps = con.prepareStatement(Agregar_Usuario);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setNull(3, java.sql.Types.NULL);
-            ps.setBoolean(4, tipoUsuario);
+            ps.setString(1, nombre);
+            ps.setString(2, correo);
+            ps.setString(3, password);
+            ps.setString(4, confPass );
+            ps.setString(5, preguntaSeg );
+            ps.setString(6, respuestaSeg );
+            ps.setString(7, direccion );
+            ps.setBoolean(8, tipoUsuario);
             ps.executeUpdate();
             System.out.println("Se ha agredado un usuario");
         } catch (Exception e){
@@ -41,10 +50,10 @@ public class BaseDatos {
 
 
 
-    public boolean validar_Usuario(String username, String password){
+    public boolean validar_Usuario(String correo, String password){
         try{
             consulta = con.createStatement();
-            resultado = consulta.executeQuery("call validacion_usuario('" + username + "', '" + password +"')");
+            resultado = consulta.executeQuery("call validacion_usuario('" + correo + "', '" + password +"')");
             if (resultado.next()){
                 return true;
             }
@@ -53,10 +62,10 @@ public class BaseDatos {
         } return false;
     }
 
-    public boolean esAdmin(String username, String password){
+    public boolean esAdmin(String correo, String password){
         try{
             consulta = con.createStatement();
-            resultado = consulta.executeQuery("call validacion_usuario('" + username + "', '" + password +"')");
+            resultado = consulta.executeQuery("call validacion_usuario('" + correo + "', '" + password +"')");
             if (resultado.next() && resultado.getInt("esAdmin") == 1){
                 return true;
             }
@@ -66,10 +75,10 @@ public class BaseDatos {
         } return false;
     }
 
-    public boolean agregarPlanta(String nombre, String descripcion, String nombreCientifico,
+    public boolean agregarPelicula(String nombre, String descripcion, String nombreCientifico,
                                  String propiedades, String efectosSecundarios, byte[] imagen) {
 
-        try (PreparedStatement ps = con.prepareStatement(Agregar_Planta)) {
+        try (PreparedStatement ps = con.prepareStatement(Agregar_Pelicula)) {
             ps.setString(1, nombre);
             ps.setString(2, descripcion);
             ps.setString(3, nombreCientifico);
@@ -84,8 +93,8 @@ public class BaseDatos {
         }
     }
 
-    public ArrayList<AltaPlantasController.Planta> obtenerPlantas() {
-        ArrayList<AltaPlantasController.Planta> plantas = new ArrayList<>();
+    public ArrayList<AltaPeliculasController.Planta> obtenerPeliculas() {
+        ArrayList<AltaPeliculasController.Planta> plantas = new ArrayList<>();
         String query = "SELECT Nombre, Descripcion, NombreCientifico, Propiedades, EfectosSecundarios, Imagen FROM Planta";
 
         try (Statement stmt = con.createStatement();
@@ -100,7 +109,7 @@ public class BaseDatos {
                     blob.free();
                 }
 
-                plantas.add(new AltaPlantasController.Planta(
+                plantas.add(new AltaPeliculasController.Planta(
                         rs.getString("Nombre"),
                         rs.getString("Descripcion"),
                         rs.getString("NombreCientifico"),
@@ -117,7 +126,7 @@ public class BaseDatos {
 
 
 
-    public boolean modificarPlanta(String oldNombre, String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios, byte[] imagen) {
+    public boolean modificarPeliculas(String oldNombre, String nombre, String descripcion, String nombreCientifico, String propiedades, String efectosSecundarios, byte[] imagen) {
         String query;
         if (imagen != null) {
             query = "UPDATE Planta SET Nombre = ?, Descripcion = ?, NombreCientifico = ?, Propiedades = ?, EfectosSecundarios = ?, Imagen = ? WHERE Nombre = ?";

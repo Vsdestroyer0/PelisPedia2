@@ -105,7 +105,6 @@ public class HelloController {
         }
     }
 
-
     @FXML
     private void openRegistroWindow(){
         try{

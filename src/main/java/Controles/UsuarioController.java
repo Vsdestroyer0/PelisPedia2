@@ -29,33 +29,33 @@ public class UsuarioController {
     BaseDatos baseDatos = new BaseDatos();
 
     @FXML
-    private TableView<AltaPlantasController.Planta> tablePlantas;
+    private TableView<AltaPeliculasController.Planta> tablePlantas;
 
     @FXML
-    private TableColumn<AltaPlantasController.Planta, String> colNombrePlanta;
+    private TableColumn<AltaPeliculasController.Planta, String> colNombrePlanta;
 
     @FXML
-    private TableColumn<AltaPlantasController.Planta, String> colDescripcionPlanta;
+    private TableColumn<AltaPeliculasController.Planta, String> colDescripcionPlanta;
 
     @FXML
-    private TableColumn<AltaPlantasController.Planta, String> colNombreCientifico;
+    private TableColumn<AltaPeliculasController.Planta, String> colNombreCientifico;
 
     @FXML
-    private TableColumn<AltaPlantasController.Planta, String> colPropiedades;
+    private TableColumn<AltaPeliculasController.Planta, String> colPropiedades;
 
     @FXML
-    private TableColumn<AltaPlantasController.Planta, String> colEfectosSecundarios;
+    private TableColumn<AltaPeliculasController.Planta, String> colEfectosSecundarios;
 
     @FXML
-    private TableColumn<AltaPlantasController.Planta, byte[]> colNombrePlanta1;
+    private TableColumn<AltaPeliculasController.Planta, byte[]> colNombrePlanta1;
 
     @FXML
-    private ObservableList<AltaPlantasController.Planta> plantasList;
+    private ObservableList<AltaPeliculasController.Planta> plantasList;
 
     @FXML
     private TextField txtBusqueda;
 
-    private FilteredList<AltaPlantasController.Planta> filteredPlantas;
+    private FilteredList<AltaPeliculasController.Planta> filteredPlantas;
 
     @FXML
     public void initialize() {
@@ -75,14 +75,14 @@ public class UsuarioController {
                 .forEach(this::configurarColumnaTexto);
 
         tablePlantas.setItems(plantasList);
-        obtenerPlantas();
+        obtenerPeliculas();
 
         // Filtrado de plantas
         filteredPlantas = new FilteredList<>(plantasList, p -> true);
         tablePlantas.setItems(filteredPlantas);
 
         txtBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
-            filtrarPlantas();
+            filtrarPeliculas();
 
         });
     }
@@ -163,7 +163,7 @@ public class UsuarioController {
     }
 
     @FXML
-    void filtrarPlantas() {
+    void filtrarPeliculas() {
         String filtro = txtBusqueda.getText().toLowerCase();
 
         filteredPlantas.setPredicate(planta -> {
@@ -177,9 +177,9 @@ public class UsuarioController {
         });
     }
 
-    public void obtenerPlantas() {
+    public void obtenerPeliculas() {
         plantasList.clear();
-        ArrayList<AltaPlantasController.Planta> plantas = baseDatos.obtenerPlantas();
+        ArrayList<AltaPeliculasController.Planta> plantas = baseDatos.obtenerPeliculas();
         if (plantas != null){
             plantasList.addAll(plantas);
         }
