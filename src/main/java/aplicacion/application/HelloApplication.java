@@ -16,7 +16,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Bienvenido a PelisPedia");
         stage.setScene(scene);
         stage.show();
-
     }
 
     public static void main(String[] args) {

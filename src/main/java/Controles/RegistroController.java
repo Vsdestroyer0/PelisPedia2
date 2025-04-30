@@ -12,75 +12,112 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class RegistroController {
-    @FXML
-    private TextField txtUsername;
+    // Campos de texto (manteniendo los mismos)
+    @FXML private TextField txtUsername;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtSecurityQuestion;
+    @FXML private TextField txtSecurityAnswer;
+    @FXML private PasswordField txtPassword;
+    @FXML private PasswordField txtConfirmPassword;
+    @FXML private TextField txtVisiblePassword;
+    @FXML private TextField txtVisibleConfirmPassword;
+    @FXML private Button btnTogglePassword1;
+    @FXML private Button btnTogglePassword2;
 
-    @FXML
-    private TextField txtEmail;
-
-    @FXML
-    private TextField txtSecurityQuestion;
-
-    @FXML
-    private TextField txtSecurityAnswer;
-
-    @FXML
-    private PasswordField txtPassword;
-
-    @FXML
-    private PasswordField txtConfirmPassword;
-
-    @FXML
-    private TextField txtVisiblePassword;
-
-    @FXML
-    private TextField txtVisibleConfirmPassword;
-
-    @FXML
-    private Button btnTogglePassword1;
-
-    @FXML
-    private Button btnTogglePassword2;
+    private boolean passwordVisible = false;
+    private boolean confirmPasswordVisible = false;
 
     @FXML
     public void initialize() {
-        // Sincronizar los campos de texto visibles con los campos de contraseña
-        txtVisiblePassword.textProperty().bindBidirectional(txtPassword.textProperty());
-        txtVisibleConfirmPassword.textProperty().bindBidirectional(txtConfirmPassword.textProperty());
+        // Configurar bindings bidireccionales
+        txtVisiblePassword.visibleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                txtVisiblePassword.setText(txtPassword.getText());
+            } else {
+                txtPassword.setText(txtVisiblePassword.getText());
+            }
+        });
+
+        txtVisibleConfirmPassword.visibleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                txtVisibleConfirmPassword.setText(txtConfirmPassword.getText());
+            } else {
+                txtConfirmPassword.setText(txtVisibleConfirmPassword.getText());
+            }
+        });
+
+        // Ocultar campos de texto visibles inicialmente
+        txtVisiblePassword.setVisible(false);
+        txtVisibleConfirmPassword.setVisible(false);
     }
 
     @FXML
     public void togglePasswordVisibility(ActionEvent event) {
-        // Determinar qué botón fue presionado
-        Button sourceButton = (Button) event.getSource();
-
-        if (sourceButton.equals(btnTogglePassword1)) {
-            // Toggle para el primer campo de contraseña
-            boolean isVisible = txtVisiblePassword.isVisible();
-            txtVisiblePassword.setVisible(!isVisible);
-            txtPassword.setVisible(isVisible);
-
-            // Cambiar el texto del botón
-            btnTogglePassword1.setText(isVisible ? "👁️" : "🔒");
-        } else if (sourceButton.equals(btnTogglePassword2)) {
-            // Toggle para el segundo campo de contraseña
-            boolean isVisible = txtVisibleConfirmPassword.isVisible();
-            txtVisibleConfirmPassword.setVisible(!isVisible);
-            txtConfirmPassword.setVisible(isVisible);
-
-            // Cambiar el texto del botón
-            btnTogglePassword2.setText(isVisible ? "👁" : "🔒");
+        if (event.getSource() == btnTogglePassword1) {
+            passwordVisible = !passwordVisible;
+            txtPassword.setVisible(!passwordVisible);
+            txtVisiblePassword.setVisible(passwordVisible);
+            btnTogglePassword1.setText(passwordVisible ? "🔒" : "👁️");
+        } else if (event.getSource() == btnTogglePassword2) {
+            confirmPasswordVisible = !confirmPasswordVisible;
+            txtConfirmPassword.setVisible(!confirmPasswordVisible);
+            txtVisibleConfirmPassword.setVisible(confirmPasswordVisible);
+            btnTogglePassword2.setText(confirmPasswordVisible ? "🔒" : "👁️");
         }
     }
 
     @FXML
     public void handleRegister(ActionEvent event) {
-        // Validar que las contraseñas coincidan
-        if (!txtPassword.getText().equals(txtConfirmPassword.getText())) {
-            System.out.println("Las contraseñas no coinciden");
+        // Validaciones
+        if (!validarCampos()) {
             return;
         }
+
+        // Aquí iría la lógica para registrar al usuario
+        // usuarioDAO.agregarUsuario(...);
+
         openLoginWindow();
+    }
+
+    private boolean validarCampos() {
+        // Validar campos vacíos
+        if (txtUsername.getText().isEmpty() ||
+                txtEmail.getText().isEmpty() ||
+                txtSecurityQuestion.getText().isEmpty() ||
+                txtSecurityAnswer.getText().isEmpty() ||
+                (txtPassword.getText().isEmpty() && txtVisiblePassword.getText().isEmpty()) ||
+                (txtConfirmPassword.getText().isEmpty() && txtVisibleConfirmPassword.getText().isEmpty())) {
+            mostrarError("Todos los campos son obligatorios");
+            return false;
+        }
+
+
+        // Obtener contraseña del campo visible u oculto
+        String password = passwordVisible ? txtVisiblePassword.getText() : txtPassword.getText();
+        String confirmPassword = confirmPasswordVisible ? txtVisibleConfirmPassword.getText() : txtConfirmPassword.getText();
+
+        // Validar coincidencia de contraseñas
+        if (!password.equals(confirmPassword)) {
+            mostrarError("Las contraseñas no coinciden");
+            return false;
+        }
+
+        // Validar fortaleza de contraseña
+        if (password.length() < 8) {
+            mostrarError("La contraseña debe tener al menos 8 caracteres");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void mostrarError(String mensaje) {
+        // Implementar lógica para mostrar mensaje de error en la UI
+        System.err.println(mensaje);
+        // Ejemplo con diálogo:
+        // Alert alert = new Alert(Alert.AlertType.ERROR);
+        // alert.setContentText(mensaje);
+        // alert.show();
     }
 
     private void openLoginWindow() {
@@ -92,13 +129,12 @@ public class RegistroController {
             stage.setScene(new Scene(pane));
             stage.show();
 
-            // Opcional: cerrar la ventana actual
+            // Cerrar ventana actual
             Stage currentStage = (Stage) txtUsername.getScene().getWindow();
             currentStage.close();
-
         } catch (Exception e) {
+            mostrarError("Error al abrir la ventana de login");
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
     }
 }

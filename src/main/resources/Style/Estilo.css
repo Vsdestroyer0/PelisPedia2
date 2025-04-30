@@ -1,0 +1,11 @@
+/* Estilo para el botón */
+.my-button {
+    -fx-background-color: #4CAF50;  /* Verde */
+    -fx-text-fill: white;
+    -fx-cursor: hand;  /* Cambia el cursor a "mano" (como pointer en CSS web) */
+}
+
+/* Efecto hover */
+.my-button:hover {
+    -fx-background-color: #45a049;
+}

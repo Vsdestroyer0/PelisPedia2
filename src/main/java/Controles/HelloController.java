@@ -16,6 +16,8 @@ import java.io.IOException;
 
 public class HelloController {
 
+
+
     @FXML private TextField txtUsername;
     @FXML private TextField txtPassword;
 
@@ -49,6 +51,7 @@ public class HelloController {
             System.out.println(e);
         }
     }
+
 
     @FXML
     private void openUsuarioWindow(){

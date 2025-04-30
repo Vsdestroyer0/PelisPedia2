@@ -45,12 +45,12 @@
          </font>
       </Label>
       <PasswordField id="contraseñaInicio" fx:id="txtPassword" layoutX="47.0" layoutY="357.0" prefHeight="25.0" prefWidth="323.0" style="-fx-background-radius: 20;" />
-      <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" text="Iniciar sesión">
+      <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20; -fx-cursor: hand;" text="Iniciar sesión">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="90.0" layoutY="495.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" text="Crear cuenta">
+      <Button layoutX="90.0" layoutY="495.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20; -fx-cursor: hand;" text="Crear cuenta">
          <font>
             <Font size="16.0" />
          </font>
@@ -60,7 +60,7 @@
             <Image url="@../Imgs/LogoInicio.png" />
          </image>
       </ImageView>
-      <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d;" text="Olvidé mi contraseña" textFill="WHITE">
+      <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d; -fx-cursor: hand;" text="Olvidé mi contraseña" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
