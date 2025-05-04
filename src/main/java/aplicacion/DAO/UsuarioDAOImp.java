@@ -30,55 +30,81 @@ public class UsuarioDAOImp implements UsuarioDAO{
         }
     }
 
-
-
     @Override
     public UsuarioVO obtenerPorCorreo(String correo) {
-        return null;
-    }
-
-    @Override
-    public boolean actualizarUsuario(UsuarioVO usuario) {
-        String sql = "UPDATE Usuario SET nombre=?, contraseña=?, preguntaSeguridad=?, "
-                + "respuestaSeguridad=?, direccion=?, esAdmin=? WHERE correo=?";
+        String sql = "SELECT * FROM Usuario WHERE correo = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getContraseña());
-            ps.setString(3, usuario.getPreguntaSeguridad());
-            ps.setString(4, usuario.getRespuestaSeguridad());
-            ps.setString(5, usuario.getDirección());
-            ps.setBoolean(6, usuario.isAdmin());
-            ps.setString(7, usuario.getCorreo());
+            ps.setString(1, correo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapearUsuario(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener usuario por correo: " + e.getMessage());
+        }
+        return null;
+    }
+
+    // aplicacion/DAO/UsuarioDAOImp.java
+    @Override
+    public boolean actualizarUsuario(UsuarioVO usuario) {
+        String sql = "UPDATE Usuario SET contraseña = ? WHERE correo = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, usuario.getContraseña());
+            ps.setString(2, usuario.getCorreo());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar usuario: " + e.getMessage());
+            System.err.println("Error al actualizar contraseña: " + e.getMessage());
             return false;
         }
     }
 
     @Override
     public boolean eliminarUsuario(String correo) {
-        return false;
+        String sql = "DELETE FROM Usuario WHERE correo = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, correo);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar usuario: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
     public UsuarioVO autenticarUsuario(String username, String password) {
-        String sql = "{call validacion_usuario(?, ?)}";
+        String sql = "SELECT nombre, correo, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin FROM Usuario WHERE correo = ? AND contraseña = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cs = conn.prepareCall(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            cs.setString(1, username);
-            cs.setString(2, password);
+            ps.setString(1, username);
+            ps.setString(2, password);
 
-            ResultSet rs = cs.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return mapearUsuario(rs);
+                return new UsuarioVO(
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        null,
+                        rs.getString("preguntaSeguridad"),
+                        rs.getString("respuestaSeguridad"),
+                        rs.getString("direccion"),
+                        rs.getBoolean("esAdmin")
+                );
             }
         } catch (SQLException e) {
             System.err.println("Error en autenticación: " + e.getMessage());
@@ -111,15 +137,16 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
     private UsuarioVO mapearUsuario(ResultSet rs) throws SQLException {
         return new UsuarioVO(
-                rs.getString("id"),
                 rs.getString("nombre"),
                 rs.getString("correo"),
-                null, // parametro contraseña vacio
+                null, // contraseña vacía por seguridad
                 rs.getString("preguntaSeguridad"),
                 rs.getString("respuestaSeguridad"),
                 rs.getString("direccion"),
                 rs.getBoolean("esAdmin")
         );
     }
+
+
 
 }

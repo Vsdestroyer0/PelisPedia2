@@ -64,7 +64,7 @@
                 <Image url="@../Imgs/Claqueta.jpg" />
             </image>
         </ImageView>
-        <Button layoutX="609.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="35.0" prefWidth="164.0" style="-fx-background-color: LIGHTGRAY; -fx-background-radius: 30;" text="Menú principal" textFill="#3c3c3c">
+        <Button layoutX="609.0" layoutY="28.0" mnemonicParsing="false" onAction="#openLoggin" prefHeight="35.0" prefWidth="164.0" style="-fx-background-color: LIGHTGRAY; -fx-background-radius: 30;" text="Menú principal" textFill="#3c3c3c">
             <font>
                 <Font size="16.0" />
             </font>

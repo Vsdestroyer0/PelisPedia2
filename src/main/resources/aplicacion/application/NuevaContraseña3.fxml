@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="899.0" style="-fx-background-radius: 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="899.0" style="-fx-background-radius: 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.NuevaContraseña3Controller">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" height="601.0" stroke="BLACK" strokeType="INSIDE" width="905.0">
             <fill>
@@ -32,14 +32,13 @@
                 </LinearGradient>
             </fill></Rectangle>
         <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#27254d" height="510.0" layoutX="31.0" layoutY="77.0" stroke="#8d8675" strokeType="INSIDE" strokeWidth="0.0" style="-fx-smooth: 12;" width="397.0" />
-        <Label layoutX="47.0" layoutY="216.0" prefHeight="17.0" prefWidth="287.0" text="Nueva contraseña" textFill="WHITE">
+        <Label layoutX="47.0" layoutY="216.0" prefHeight="17.0" prefWidth="287.0" text="Nueva contraseña" textFill="WHITE" >
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <PasswordField fx:id="txtPassword" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" />
-        <Button fx:id="btnTogglePassword1" layoutX="335.0" layoutY="266.0" mnemonicParsing="false" onAction="#togglePasswordVisibility" prefHeight="25.0" prefWidth="35.0" style="-fx-background-radius: 20;" text="👁️" />
-        <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" text="Comprobar">
+        <PasswordField fx:id="txtNuevaContraseña" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" />
+        <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" text="Comprobar" onAction="#handleCambiarContraseña" >
             <font>
                 <Font size="16.0" />
             </font>
@@ -54,7 +53,7 @@
                 <Image url="@../Imgs/LogoInicio.png" />
             </image>
         </ImageView>
-        <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d;" text="Regresar" textFill="WHITE">
+        <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d;" text="Regresar" textFill="WHITE">
             <font>
                 <Font size="16.0" />
             </font>
@@ -74,7 +73,7 @@
                 <Image url="@../Imgs/Claqueta.jpg" />
             </image>
         </ImageView>
-        <Button layoutX="479.0" layoutY="414.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="70.0" prefWidth="408.0" style="-fx-background-color: #101025; -fx-background-radius: 20;" text="Conecta con una nueva historia" textFill="WHITE" underline="true">
+        <Button layoutX="479.0" layoutY="414.0" mnemonicParsing="false"  prefHeight="70.0" prefWidth="408.0" style="-fx-background-color: #101025; -fx-background-radius: 20;" text="Conecta con una nueva historia" textFill="WHITE" underline="true">
             <font>
                 <Font size="24.0" />
             </font>
@@ -84,10 +83,7 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <PasswordField fx:id="txtConfirmPassword" layoutX="47.0" layoutY="377.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" />
-        <Button fx:id="btnTogglePassword2" layoutX="335.0" layoutY="377.0" mnemonicParsing="false" onAction="#togglePasswordVisibility" prefHeight="25.0" prefWidth="35.0" style="-fx-background-radius: 20;" text="👁️" />
-        <!-- Campos de texto invisibles para mostrar contraseñas -->
-        <javafx.scene.control.TextField fx:id="txtVisiblePassword" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" visible="false" />
-        <javafx.scene.control.TextField fx:id="txtVisibleConfirmPassword" layoutX="47.0" layoutY="377.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" visible="false" />
+        <PasswordField fx:id="txtConfirmarContraseña" layoutX="47.0" layoutY="377.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" />
+
     </children>
 </AnchorPane>

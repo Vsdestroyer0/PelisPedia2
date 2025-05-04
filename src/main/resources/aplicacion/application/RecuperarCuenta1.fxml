@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="899.0" style="-fx-background-radius: 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="899.0" style="-fx-background-radius: 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.RecuperarCuenta1Controller">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" height="601.0" stroke="BLACK" strokeType="INSIDE" width="905.0">
             <fill>
@@ -31,19 +31,19 @@
                     </stops>
                 </LinearGradient>
             </fill></Rectangle>
-        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#27254d" height="510.0" layoutX="31.0" layoutY="77.0" stroke="#8d8675" strokeType="INSIDE" strokeWidth="0.0" style="-fx-smooth: 12;" width="397.0" />
+        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#27254d" height="510.0" layoutX="31.0" layoutY="77.0" stroke="#8d8675" strokeType="INSIDE" strokeWidth="0.0" width="397.0" />
         <Label layoutX="47.0" layoutY="216.0" prefHeight="17.0" prefWidth="287.0" text="Correo Electrónico" textFill="WHITE">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <TextField fx:id="txtUsername" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="323.0" style="-fx-background-radius: 20;" />
-        <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" text="Comprobar">
+        <TextField fx:id="txtCorreo" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="323.0" style="-fx-background-radius: 20;" promptText="ejemplo@dominio.com"/>
+        <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20; -fx-cursor: hand;" text="Comprobar"  onAction="#handleComprobarCorreo">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-      <ImageView fitHeight="358.0" fitWidth="357.0" layoutX="584.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" style="-fx-smooth: 30;">
+      <ImageView fitHeight="358.0" fitWidth="357.0" layoutX="727.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Imgs/Peli1.png" />
          </image>
@@ -53,7 +53,7 @@
                 <Image url="@../Imgs/LogoInicio.png" />
             </image>
         </ImageView>
-        <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d;" text="Regresar" textFill="WHITE">
+        <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d; -fx-cursor: hand;" text="Regresar" textFill="WHITE">
             <font>
                 <Font size="16.0" />
             </font>
@@ -73,7 +73,7 @@
                 <Image url="@../Imgs/Claqueta.jpg" />
             </image>
         </ImageView>
-        <Button layoutX="479.0" layoutY="414.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="70.0" prefWidth="408.0" style="-fx-background-color: #101025; -fx-background-radius: 20;" text="Conecta con una nueva historia" textFill="WHITE" underline="true">
+        <Button layoutX="479.0" layoutY="414.0" mnemonicParsing="false"  prefHeight="70.0" prefWidth="408.0" style="-fx-background-color: #101025; -fx-background-radius: 20;" text="Conecta con una nueva historia" textFill="WHITE" underline="true">
             <font>
                 <Font size="24.0" />
             </font>

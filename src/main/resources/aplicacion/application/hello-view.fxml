@@ -60,7 +60,7 @@
             <Image url="@../Imgs/LogoInicio.png" />
          </image>
       </ImageView>
-      <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d; -fx-cursor: hand;" text="Olvidé mi contraseña" textFill="WHITE">
+      <Button id="RecuperarCuenta" layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleRecuperacion" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d; -fx-cursor: hand;" text="Olvidé mi contraseña" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
