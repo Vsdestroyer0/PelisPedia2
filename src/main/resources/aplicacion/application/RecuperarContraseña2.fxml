@@ -37,23 +37,23 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label fx:id="lblPregunta" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="323.0" style="-fx-background-radius: 20;" />
-        <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" text="Comprobar" onAction="#handleValidarRespuesta" >
+        <Label fx:id="lblPregunta" layoutX="47.0" layoutY="266.0" prefHeight="25.0" prefWidth="323.0" style="-fx-background-radius: 20; -fx-text-fill: white; -fx-font-size: 16px;" />
+        <Button layoutX="90.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleValidarRespuesta" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: lightgray; -fx-background-radius: 20; -fx-cursor: hand;" text="Comprobar">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-        <ImageView fitHeight="358.0" fitWidth="357.0" layoutX="584.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="358.0" fitWidth="357.0" layoutX="738.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" smooth="false">
             <image>
                 <Image url="@../Imgs/Peli1.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="261.0" fitWidth="273.0" layoutX="450.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="261.0" fitWidth="273.0" layoutX="450.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true" smooth="false">
             <image>
                 <Image url="@../Imgs/LogoInicio.png" />
             </image>
         </ImageView>
-        <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d;" text="Regresar" textFill="WHITE">
+        <Button layoutX="90.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleRegresar" prefHeight="35.0" prefWidth="237.0" style="-fx-background-color: #27254d; -fx-cursor: hand;" text="Regresar" textFill="WHITE">
             <font>
                 <Font size="16.0" />
             </font>
@@ -68,7 +68,7 @@
                 <Font name="Arial" size="24.0" />
             </font>
         </Label>
-        <ImageView fitHeight="52.0" fitWidth="61.0" layoutX="47.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="52.0" fitWidth="61.0" layoutX="47.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" smooth="false">
             <image>
                 <Image url="@../Imgs/Claqueta.jpg" />
             </image>

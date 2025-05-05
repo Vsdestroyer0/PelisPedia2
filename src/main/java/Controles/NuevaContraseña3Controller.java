@@ -4,9 +4,14 @@ import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class NuevaContraseña3Controller {
     @FXML private PasswordField txtNuevaContraseña;
@@ -68,5 +73,21 @@ public class NuevaContraseña3Controller {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleRegresar() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/application/hello-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) txtNuevaContraseña.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

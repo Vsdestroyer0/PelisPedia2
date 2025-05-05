@@ -3,14 +3,12 @@ package Controles;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -69,4 +67,24 @@ public class RecuperarCuenta1Controller {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+    @FXML
+    private void handleRegresar() {
+        try {
+            // Cargar hello-view.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/application/hello-view.fxml"));
+            Parent root = loader.load();
+
+            // Crear nueva escena
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Cerrar ventana actual
+            Stage currentStage = (Stage) txtCorreo.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

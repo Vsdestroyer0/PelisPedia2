@@ -134,6 +134,7 @@ public class RegistroController {
                 mostrarAlerta("Éxito", "Usuario registrado correctamente", Alert.AlertType.INFORMATION);
                 // Opcional: Limpiar campos después del registro
                 limpiarCampos();
+                openLoggin();
             } else {
                 mostrarAlerta("Error", "No se pudo registrar el usuario", Alert.AlertType.ERROR);
             }

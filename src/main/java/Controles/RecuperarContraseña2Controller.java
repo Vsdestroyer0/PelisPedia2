@@ -21,9 +21,10 @@ public class RecuperarContraseña2Controller {
 
     // Recibe datos de la pantalla anterior
     public void setDatos(String pregunta, String correo) {
-        lblPregunta.setText(pregunta);
+        lblPregunta.setText(pregunta); // ⬅️ Asignar texto al Label
         this.correoUsuario = correo;
     }
+
 
     @FXML
     private void handleValidarRespuesta() {
@@ -72,5 +73,21 @@ public class RecuperarContraseña2Controller {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleRegresar() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/application/hello-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) lblPregunta.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

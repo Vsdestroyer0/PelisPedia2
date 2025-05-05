@@ -52,13 +52,14 @@ public class UsuarioDAOImp implements UsuarioDAO{
     // aplicacion/DAO/UsuarioDAOImp.java
     @Override
     public boolean actualizarUsuario(UsuarioVO usuario) {
-        String sql = "UPDATE Usuario SET contraseña = ? WHERE correo = ?";
+        String sql = "UPDATE Usuario SET contraseña = ?, confirmarContraseña = ? WHERE correo = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getContraseña());
-            ps.setString(2, usuario.getCorreo());
+            ps.setString(2, usuario.getConfirmarContraseña());
+            ps.setString(3, usuario.getCorreo());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
