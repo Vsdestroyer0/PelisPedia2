@@ -65,6 +65,7 @@ public class NuevaContraseña3Controller {
     private void cerrarVentana() {
         Stage stage = (Stage) txtNuevaContraseña.getScene().getWindow();
         stage.close();
+        handleRegresar();
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
