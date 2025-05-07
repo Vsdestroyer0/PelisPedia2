@@ -1,15 +1,16 @@
 USE PelisPedia;
 
-CREATE TABLE crearUsuario (
-    usuario VARCHAR(15) NOT NULL,
-    contraseña VARCHAR(12) NOT NULL,
-    nombre VARCHAR(20) NOT NULL,
-    apellidos VARCHAR(20) NOT NULL,
+CREATE TABLE Usuario (
+    nombre VARCHAR(50) NOT NULL,
+    correo Varchar(50) not null,
+    contraseña VARCHAR(30) NOT NULL,
+    confirmarContraseña varchar(12) not null,
+    preguntaSeguridad VARCHAR(40) NOT NULL,
+    respuestaSeguridad VARCHAR(40) NOT NULL,
     direccion VARCHAR(30),
-    esAdmin BOOLEAN DEFAULT FALSE
-    PRIMARY KEY(usuario)
+    esAdmin boolean default false,
+    PRIMARY KEY(correo)
 );
-
 
 CREATE TABLE peliculasGeneral (
     id_pelicula INT AUTO_INCREMENT, -- Identificador único para cada película
@@ -19,16 +20,6 @@ CREATE TABLE peliculasGeneral (
     stock int(10),
     PRIMARY KEY(id_pelicula),
     UNIQUE(titulo) -- Garantiza que no haya títulos duplicados
-);
-
-CREATE TABLE usuario_cartelera (
-    id_usuario_cartelera INT AUTO_INCREMENT, -- Identificador único para esta relación
-    usuario VARCHAR(15) NOT NULL,           -- Usuario que accede a la cartelera
-    id_pelicula INT NOT NULL,               -- Película asociada al usuario
-    fecha_agregado DATETIME DEFAULT CURRENT_TIMESTAMP, -- Fecha en que la película fue añadida
-    PRIMARY KEY(id_usuario_cartelera),
-    FOREIGN KEY (usuario) REFERENCES crearUsuario(usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_pelicula) REFERENCES peliculasGeneral(id_pelicula) ON DELETE CASCADE
 );
 
 CREATE TABLE peliculasRentadas (
@@ -43,30 +34,132 @@ CREATE TABLE peliculasRentadas (
     FOREIGN KEY (id_pelicula) REFERENCES peliculasGeneral(id_pelicula)
 );
 
+drop table peliculasGeneral;
+drop table usuario_Cartelera;
+drop table peliculas_renta;
+
+
+USE PelisPedia;
+
+
+-- Trigger 1: Actualizar stock al rentar
 DELIMITER //
-CREATE PROCEDURE validacion_usuario(Nombre_User varchar(20), Contraseña_user varchar(255))
+CREATE TRIGGER after_rental_insert
+AFTER INSERT ON peliculasRentadas
+FOR EACH ROW
 BEGIN
-SELECT *
-FROM Usuario
-WHERE Nombre = Nombre_User
-  AND Contraseña = Contraseña_user;
+    IF NEW.estado = 'rentada' THEN
+        UPDATE peliculasGeneral
+        SET stock = stock - 1
+        WHERE id_pelicula = NEW.id_pelicula;
+    END IF;
+END//
+DELIMITER ;
+
+-- Trigger 2: Actualizar stock al devolver
+DELIMITER //
+CREATE TRIGGER after_rental_update
+AFTER UPDATE ON peliculasRentadas
+FOR EACH ROW
+BEGIN
+    IF NEW.estado = 'devuelta' AND OLD.estado = 'rentada' THEN
+        UPDATE peliculasGeneral
+        SET stock = stock + 1
+        WHERE id_pelicula = NEW.id_pelicula;
+    END IF;
+END//
+DELIMITER ;
+
+-- Procedimiento almacenado para rentar una película
+DELIMITER //
+CREATE PROCEDURE rentar_pelicula(
+    IN p_usuario VARCHAR(15),
+    IN p_id_pelicula INT,
+    OUT p_mensaje VARCHAR(100)
+)
+BEGIN
+    DECLARE v_stock INT;
+
+    -- Verificar el stock disponible
+    SELECT stock INTO v_stock
+    FROM peliculasGeneral
+    WHERE id_pelicula = p_id_pelicula;
+
+    -- Verificar si hay stock disponible
+    IF v_stock > 0 THEN
+        -- Insertar el registro de renta
+        INSERT INTO peliculas_renta (usuario, id_pelicula, estado_renta)
+        VALUES (p_usuario, p_id_pelicula, 'rentada');
+
+        SET p_mensaje = 'Película rentada exitosamente';
+    ELSE
+        SET p_mensaje = 'No hay stock disponible para esta película';
+    END IF;
+END//
+DELIMITER ;
+
+
+drop procedure if exists mostrarPelis;
+delimiter //
+create procedure mostrarPelis()
+begin
+    select * from peliculasGeneral;
+end //
+delimiter ;
+
+call mostrarPelis();
+
+-- Procedimiento para autenticación
+DROP PROCEDURE validacion_usuario;
+
+DELIMITER //
+CREATE PROCEDURE validacion_usuario(
+    IN p_username VARCHAR(20),
+    IN p_password VARCHAR(255)
+)
+BEGIN
+    SELECT
+        id,
+        nombre,
+        correo,
+        preguntaSeguridad,
+        respuestaSeguridad,
+        direccion,
+        esAdmin
+    FROM Usuario
+    WHERE nombre = p_username
+    AND contraseña = p_password;
 END //
 DELIMITER ;
 
 DROP PROCEDURE obtener_admin;
 
-/*Valida el usuario para el login*/
+-- Procedimiento para verificar admin
 DELIMITER //
-CREATE PROCEDURE obtener_admin(Nombre_User varchar(20),
- Contraseña_user varchar(255))
+CREATE PROCEDURE obtener_admin(IN correo_user VARCHAR(50), IN contraseña_user VARCHAR(30))
 BEGIN
-SELECT CASE WHEN esAdmin = 1 THEN 1 ELSE 0 END AS esAdmin
-FROM Usuario
-WHERE Nombre = Nombre_User
-  AND Contraseña = Contraseña_user;
+    SELECT esAdmin
+    FROM Usuario
+    WHERE correo = correo_user
+    AND contraseña = contraseña_user;
 END //
 DELIMITER ;
 
-drop table peliculasGeneral;
-drop table usuario_Cartelera;
-drop table peliculas_renta;
+USE PelisPedia;
+
+/*Ingresar usuarios*/
+insert into Usuario values ("a","a","12345678","12345678","Cuantos siglos tiene Daniel","300","Vicente Guerrero", true);
+
+/*Ingresar Pelis*/
+insert into peliculasGeneral values("Como entregar a tu dragon","","");
+
+/*Mostrar tablas general*/
+select * from Usuario;
+
+select * from peliculasGeneral;
+
+select * from peliculasRentadas;
+
+
+drop table peliculasRentadas;
+drop table Usuario;
