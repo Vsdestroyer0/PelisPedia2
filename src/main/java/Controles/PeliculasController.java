@@ -3,6 +3,7 @@ package Controles;
 import aplicacion.DAO.PeliculaDAO;
 import aplicacion.DAO.PeliculaDAOImp;
 import aplicacion.VO.PeliculaVO;
+import aplicacion.Vistas.Alertas;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Callback;
 import java.io.ByteArrayInputStream;
 
 public class PeliculasController {
@@ -77,10 +77,10 @@ public class PeliculasController {
         if (seleccionada != null && seleccionada.getStock() > 0) {
             if (peliculaDAO.rentarPelicula("usuario@ejemplo.com", seleccionada.getIdPelicula())) {
                 cargarPeliculas();
-                mostrarAlerta("Éxito", "Película rentada", Alert.AlertType.INFORMATION);
+                Alertas.mostrarAdvertencia("Éxito Película rentada");
             }
         } else {
-            mostrarAlerta("Error", "No hay stock disponible", Alert.AlertType.ERROR);
+            Alertas.mostrarError("Error, no hay stock disponible");
         }
     }
 
@@ -89,11 +89,4 @@ public class PeliculasController {
         // Lógica para devolución similar a renta
     }
 
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
 }

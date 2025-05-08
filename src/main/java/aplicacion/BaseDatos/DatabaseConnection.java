@@ -1,5 +1,7 @@
 package aplicacion.BaseDatos;
 
+import aplicacion.Vistas.Alertas;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public class DatabaseConnection {
     // testeoDeConexiónEnCasoDeError
     public static void testConnection() {
         try (Connection conn = getConnection()) {
-            System.out.println("Conexión exitosa a la base de datos");
+            Alertas.mostrarExito("Conexión exitosa a la base de datos");
         } catch (SQLException e) {
             throw new RuntimeException("Error al conectar a la base de datos", e);
         }

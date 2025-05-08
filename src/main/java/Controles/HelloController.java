@@ -1,16 +1,15 @@
 package Controles;
 
-import aplicacion.BaseDatos.DatabaseConnection;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
+import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -33,17 +32,12 @@ public class HelloController {
         if (usuario != null) {
             if (usuarioDAO.esAdmin(username)) {
                 // Abrir ventana de administrador
-                //abrirVentanaAdmin();
+                openAdminWindows();
             } else {
                 openUsuarioWindow();
             }
         } else {
-            // Mostrar mensaje de error
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error de Login");
-            alert.setHeaderText(null);
-            alert.setContentText("Usuario o contraseña incorrectos");
-            alert.showAndWait();
+            Alertas.mostrarError("Usuario o contraseña incorrectos");
         }
     }
 
@@ -58,15 +52,14 @@ public class HelloController {
             ((Stage) txtUsername.getScene().getWindow()).close();
             newStage.show();
         } catch (IOException e) {
-            System.err.println("Error cargando FXML: " + e.getMessage());
-            e.printStackTrace();
+            Alertas.mostrarError("Error al cargar el fxml de usuario" + e.getMessage());
         }
     }
 
     @FXML
     private void openAdminWindows(){
         try{
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("PanelUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("AdministradorOpciones.fxml"));
             Parent root = loader.load();
             Stage newStage = new Stage();
             newStage.setScene(new Scene(root));
@@ -74,8 +67,7 @@ public class HelloController {
             ((Stage) txtUsername.getScene().getWindow()).close();
             newStage.show();
         } catch (IOException e) {
-            System.err.println("Error cargando FXML: " + e.getMessage());
-            e.printStackTrace();
+            Alertas.mostrarError("Error al cargar el fxml de administrador" + e.getMessage());
         }
     }
 
@@ -89,24 +81,16 @@ public class HelloController {
         openRecuperarContraseña();
     }
 
-    
-
-
-
-
     @FXML
     private void openRegistroWindow(){
         try{
-            // Usar la ruta absoluta desde la raíz del classpath
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("aplicacion/application/CrearCuenta.fxml"));
 
             if (loader.getLocation() == null) {
-                // Si no funciona, intentar con una ruta relativa al paquete de HelloApplication
                 loader = new FXMLLoader(HelloApplication.class.getResource("CrearCuenta.fxml"));
             }
 
             if (loader.getLocation() == null) {
-                // Si aún no funciona, intentar con una ruta absoluta desde la raíz
                 loader = new FXMLLoader(getClass().getClassLoader().getResource("/aplicacion/application/CrearCuenta.fxml"));
             }
 
@@ -114,7 +98,7 @@ public class HelloController {
                 throw new IOException("No se pudo encontrar el archivo FXML: CrearCuenta.fxml en la ruta esperada");
             }
 
-            System.out.println("Archivo FXML encontrado en: " + loader.getLocation());
+            Alertas.mostrarAdvertencia("Archivo FXML encontrado en: " + loader.getLocation());
 
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
@@ -127,17 +111,7 @@ public class HelloController {
 
             stage.show();
         } catch (Exception e){
-            System.out.println("Error al abrir ventana de registro: " + e.getMessage());
-            e.printStackTrace();
-
-            // Mostrar diálogo de error con información detallada
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error al cargar la ventana de registro");
-            alert.setContentText("Error: " + e.getMessage() +
-                    "\n\nRuta del archivo esperada: aplicacion/application/CrearCuenta.fxml" +
-                    "\nVerifique que el archivo existe y tiene los permisos correctos.");
-            alert.showAndWait();
+            Alertas.mostrarError("Error al cargar la ventana de recuperación" + e.getMessage());
         }
     }
 
@@ -161,7 +135,7 @@ public class HelloController {
                 throw new IOException("No se pudo encontrar el archivo FXML: RecuperarCuenta1.fxml en la ruta esperada");
             }
 
-            System.out.println("Archivo FXML encontrado en: " + loader.getLocation());
+            Alertas.mostrarExito("Archivo FXML encontrado en: " +loader.getLocation());
 
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
@@ -174,17 +148,7 @@ public class HelloController {
 
             stage.show();
         } catch (Exception e){
-            System.out.println("Error al abrir ventana de recuperación: " + e.getMessage());
-            e.printStackTrace();
-
-            // Mostrar diálogo de error con información detallada
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error al cargar la ventana de recuperación");
-            alert.setContentText("Error: " + e.getMessage() +
-                    "\n\nRuta del archivo esperada: aplicacion/application/RecuperarCuenta1.fxml" +
-                    "\nVerifique que el archivo existe y tiene los permisos correctos.");
-            alert.showAndWait();
+            Alertas.mostrarError("Error al abrir la ventana de recuperación" + e.getMessage());
         }
     }
 

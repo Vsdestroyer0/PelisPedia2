@@ -3,11 +3,11 @@ package Controles;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
+import aplicacion.Vistas.Alertas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
@@ -31,17 +31,17 @@ public class NuevaContraseña3Controller {
 
         // Validaciones
         if (nuevaContraseña.isEmpty() || confirmacion.isEmpty()) {
-            mostrarAlerta("Error", "Complete todos los campos", Alert.AlertType.ERROR);
+            Alertas.mostrarAdvertencia("Complete todos los campos");
             return;
         }
 
         if (!nuevaContraseña.equals(confirmacion)) {
-            mostrarAlerta("Error", "Las contraseñas no coinciden", Alert.AlertType.ERROR);
+            Alertas.mostrarAdvertencia("Las contraseñas no coinciden");
             return;
         }
 
         if (nuevaContraseña.length() < 8) {
-            mostrarAlerta("Error", "Mínimo 8 caracteres", Alert.AlertType.ERROR);
+            Alertas.mostrarAdvertencia("La contraseña tiene que tener más de 8 carácteres");
             return;
         }
 
@@ -54,10 +54,10 @@ public class NuevaContraseña3Controller {
             usuario.setConfirmarContraseña(confirmacion);
 
             if (usuarioDAO.actualizarUsuario(usuario)) {
-                mostrarAlerta("Éxito", "Contraseña actualizada", Alert.AlertType.INFORMATION);
+                Alertas.mostrarAdvertencia("Contraseña actualizada");
                 cerrarVentana();
             } else {
-                mostrarAlerta("Error", "Error al guardar", Alert.AlertType.ERROR);
+                Alertas.mostrarError("Las contraseñas no coinciden");
             }
         }
     }
@@ -68,13 +68,6 @@ public class NuevaContraseña3Controller {
         handleRegresar();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
     @FXML
     private void handleRegresar() {
         try {
@@ -88,7 +81,7 @@ public class NuevaContraseña3Controller {
             Stage currentStage = (Stage) txtNuevaContraseña.getScene().getWindow();
             currentStage.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Alertas.mostrarError("No se puede acceder al inicio" + e.getMessage());
         }
     }
 }

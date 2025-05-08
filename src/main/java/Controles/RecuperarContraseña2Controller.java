@@ -3,11 +3,11 @@ package Controles;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
+import aplicacion.Vistas.Alertas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -31,7 +31,7 @@ public class RecuperarContraseña2Controller {
         String respuesta = txtRespuesta.getText().trim();
 
         if (respuesta.isEmpty()) {
-            mostrarAlerta("Error", "Ingrese la respuesta de seguridad", Alert.AlertType.ERROR);
+            Alertas.mostrarError("Error, ingrese la respuesta de seguridad");
             return;
         }
 
@@ -42,7 +42,7 @@ public class RecuperarContraseña2Controller {
             // Navegar a pantalla de nueva contraseña
             abrirNuevaContraseña3(correoUsuario);
         } else {
-            mostrarAlerta("Error", "Respuesta incorrecta", Alert.AlertType.ERROR);
+            Alertas.mostrarError("Error, respuesta incorrecta");
         }
     }
 
@@ -67,13 +67,6 @@ public class RecuperarContraseña2Controller {
         }
     }
 
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
     @FXML
     private void handleRegresar() {
         try {

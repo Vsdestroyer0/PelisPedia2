@@ -3,6 +3,7 @@ package Controles;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
+import aplicacion.Vistas.Alertas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,7 +23,7 @@ public class RecuperarCuenta1Controller {
 
         // Validar formato de correo
         if (!correo.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-            mostrarAlerta("Error", "Formato de correo inválido", Alert.AlertType.ERROR);
+            Alertas.mostrarError("Error, formato de correo inválido");
             return;
         }
 
@@ -33,7 +34,7 @@ public class RecuperarCuenta1Controller {
             // Navegar a la siguiente pantalla y pasar la pregunta de seguridad
             abrirRecuperarContraseña2(usuario.getPreguntaSeguridad(), correo);
         } else {
-            mostrarAlerta("Error", "Correo no registrado", Alert.AlertType.ERROR);
+            Alertas.mostrarError("Error, correo no registrado");
         }
     }
 
@@ -60,13 +61,6 @@ public class RecuperarCuenta1Controller {
         }
     }
 
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
     @FXML
     private void handleRegresar() {
         try {

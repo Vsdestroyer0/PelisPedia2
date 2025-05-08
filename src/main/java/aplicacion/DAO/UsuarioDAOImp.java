@@ -1,6 +1,8 @@
 package aplicacion.DAO;
 import aplicacion.VO.UsuarioVO;
 import aplicacion.BaseDatos.DatabaseConnection;
+import aplicacion.Vistas.Alertas;
+
 import java.sql.*;
 
 public class UsuarioDAOImp implements UsuarioDAO{
@@ -25,7 +27,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error al agregar usuario" + e.getMessage());
+            Alertas.mostrarError("Error al agregar usuario");
             return false;
         }
     }
@@ -44,7 +46,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 return mapearUsuario(rs);
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener usuario por correo: " + e.getMessage());
+            Alertas.mostrarError("Error al obtener el correo");
         }
         return null;
     }
@@ -63,7 +65,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar contraseña: " + e.getMessage());
+            Alertas.mostrarError("Error al actualizar contraseña");
             return false;
         }
     }
@@ -79,7 +81,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al eliminar usuario: " + e.getMessage());
+            Alertas.mostrarError("Error al eliminar usuario");
             return false;
         }
     }
@@ -108,7 +110,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 );
             }
         } catch (SQLException e) {
-            System.err.println("Error en autenticación: " + e.getMessage());
+            Alertas.mostrarError("Error en autentificación ");
         }
         return null;
     }
@@ -131,7 +133,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 return rs.getBoolean("esAdmin");
             }
         } catch (SQLException e) {
-            System.err.println("Error al verificar admin: " + e.getMessage());
+            Alertas.mostrarError("Error al verificar admin");
         }
         return false;
     }

@@ -2,6 +2,8 @@ package aplicacion.DAO;
 
 import aplicacion.VO.PeliculaVO;
 import aplicacion.BaseDatos.DatabaseConnection;
+import aplicacion.Vistas.Alertas;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ public class PeliculaDAOImp implements PeliculaDAO {
                 ));
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener películas: " + e.getMessage());
+            Alertas.mostrarError("Error al obtener películas");
         }
         return peliculas;
     }
@@ -65,7 +67,7 @@ public class PeliculaDAOImp implements PeliculaDAO {
             return true;
 
         } catch (SQLException e) {
-            System.err.println("Error al rentar película: " + e.getMessage());
+            Alertas.mostrarError("Error al rentar películas");
             return false;
         }
     }
@@ -75,5 +77,4 @@ public class PeliculaDAOImp implements PeliculaDAO {
         return false;
     }
 
-    // Implementar otros métodos...
 }

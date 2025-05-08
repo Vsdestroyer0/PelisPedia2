@@ -3,20 +3,18 @@ package Controles;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
+import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.util.UUID;
 
 public class RegistroController {
     // Campos de texto (manteniendo los mismos)
@@ -98,7 +96,7 @@ public class RegistroController {
                     (passwordVisible ? txtVisiblePassword.getText().isEmpty() : txtPassword.getText().isEmpty()) ||
                     (confirmPasswordVisible ? txtVisibleConfirmPassword.getText().isEmpty() : txtConfirmPassword.getText().isEmpty())) {
 
-                mostrarAlerta("Error", "Todos los campos son obligatorios", Alert.AlertType.ERROR);
+                Alertas.mostrarError("Error, todos los campos son obligatorios");
                 return;
             }
 
@@ -108,13 +106,13 @@ public class RegistroController {
 
             // Validar coincidencia de contraseñas
             if (!password.equals(confirmPassword)) {
-                mostrarAlerta("Error", "Las contraseñas no coinciden", Alert.AlertType.ERROR);
+                Alertas.mostrarError("Error, las contraseñas no coinciden");
                 return;
             }
 
             // Validar pregunta/respuesta seguridad
             if (txtSecurityQuestion.getText().isEmpty() || txtSecurityAnswer.getText().isEmpty()) {
-                mostrarAlerta("Error", "Debe completar la pregunta y respuesta de seguridad", Alert.AlertType.ERROR);
+                Alertas.mostrarError("Error, debe completar la pregunta y respuesta de seguridad");
                 return;
             }
 
@@ -131,27 +129,17 @@ public class RegistroController {
 
             // Registrar en base de datos
             if (usuarioDAO.AgregarUsuario(nuevoUsuario)) {
-                mostrarAlerta("Éxito", "Usuario registrado correctamente", Alert.AlertType.INFORMATION);
+                Alertas.mostrarAdvertencia("Exito, el usuario se registró correctamente");
                 // Opcional: Limpiar campos después del registro
                 limpiarCampos();
                 openLoggin();
             } else {
-                mostrarAlerta("Error", "No se pudo registrar el usuario", Alert.AlertType.ERROR);
+                Alertas.mostrarError("Error, no se pudo registrar el usuario");
             }
 
         } catch (Exception e) {
-            mostrarAlerta("Error crítico", "Ocurrió un error: " + e.getMessage(), Alert.AlertType.ERROR);
-            e.printStackTrace();
+            Alertas.mostrarError("Error crítico, ocurró el siguiente error " + e.getMessage());
         }
-    }
-
-    // Método para mostrar alertas
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     // Método opcional para limpiar campos después del registro
@@ -165,56 +153,6 @@ public class RegistroController {
         txtSecurityQuestion.clear();
         txtSecurityAnswer.clear();
         txtAddress.clear();
-    }
-
-    private boolean validarCampos() {
-        // Validar campos vacíos
-        if (txtUsername.getText().isEmpty() ||
-                txtEmail.getText().isEmpty() ||
-                txtSecurityQuestion.getText().isEmpty() ||
-                txtSecurityAnswer.getText().isEmpty() ||
-                txtAddress.getText().isEmpty() ||
-                (txtPassword.getText().isEmpty() && txtVisiblePassword.getText().isEmpty()) ||
-                (txtConfirmPassword.getText().isEmpty() && txtVisibleConfirmPassword.getText().isEmpty())) {
-            mostrarError("Todos los campos son obligatorios");
-            return false;
-        }
-
-        // Obtener contraseña del campo visible u oculto
-        String password = passwordVisible ? txtVisiblePassword.getText() : txtPassword.getText();
-        String confirmPassword = confirmPasswordVisible ? txtVisibleConfirmPassword.getText() : txtConfirmPassword.getText();
-
-        // Validar coincidencia de contraseñas
-        if (!password.equals(confirmPassword)) {
-            mostrarError("Las contraseñas no coinciden");
-            return false;
-        }
-
-        // Validar fortaleza de contraseña
-        if (password.length() < 8) {
-            mostrarError("La contraseña debe tener al menos 8 caracteres");
-            return false;
-        }
-
-        // Validar formato de correo electrónico
-        if (!txtEmail.getText().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-            mostrarError("El formato del correo electrónico no es válido");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void mostrarError(String mensaje) {
-        mostrarMensaje("Error", mensaje, Alert.AlertType.ERROR);
-    }
-
-    private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     @FXML
@@ -237,7 +175,7 @@ public class RegistroController {
                 throw new IOException("No se pudo encontrar el archivo FXML: hello-view.fxml en la ruta esperada");
             }
 
-            System.out.println("Archivo FXML encontrado en: " + loader.getLocation());
+            Alertas.mostrarExito("Archivo FXML encontrado en: " + loader.getLocation() );
 
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
@@ -250,17 +188,7 @@ public class RegistroController {
 
             stage.show();
         } catch (Exception e){
-            System.out.println("Error al abrir ventana de registro: " + e.getMessage());
-            e.printStackTrace();
-
-            // Mostrar diálogo de error con información detallada
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error al cargar la ventana de registro");
-            alert.setContentText("Error: " + e.getMessage() +
-                    "\n\nRuta del archivo esperada: aplicacion/application/hello-view.fxml" +
-                    "\nVerifique que el archivo existe y tiene los permisos correctos.");
-            alert.showAndWait();
+            Alertas.mostrarError("Error al cargar la ventana de registro" + e.getMessage());
         }
     }
 
