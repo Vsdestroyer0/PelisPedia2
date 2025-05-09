@@ -30,8 +30,7 @@ public class HelloController {
         UsuarioVO usuario = usuarioDAO.autenticarUsuario(username, password);
 
         if (usuario != null) {
-            if (usuarioDAO.esAdmin(username)) {
-                // Abrir ventana de administrador
+            if (usuario.isAdmin()) {
                 openAdminWindows();
             } else {
                 openUsuarioWindow();
@@ -39,6 +38,16 @@ public class HelloController {
         } else {
             Alertas.mostrarError("Usuario o contraseña incorrectos");
         }
+    }
+
+    @FXML
+    void handleRegister(ActionEvent event){
+        openRegistroWindow();
+    }
+
+    @FXML
+    void handleRecuperacion(ActionEvent event){
+        openRecuperarContraseña();
     }
 
     @FXML
@@ -59,7 +68,7 @@ public class HelloController {
     @FXML
     private void openAdminWindows(){
         try{
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("AdministradorOpciones.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("MenuAdministrador.fxml"));
             Parent root = loader.load();
             Stage newStage = new Stage();
             newStage.setScene(new Scene(root));
@@ -71,15 +80,7 @@ public class HelloController {
         }
     }
 
-    @FXML
-    void handleRegister(ActionEvent event){
-        openRegistroWindow();
-    }
 
-    @FXML
-    void handleRecuperacion(ActionEvent event){
-        openRecuperarContraseña();
-    }
 
     @FXML
     private void openRegistroWindow(){

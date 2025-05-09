@@ -25,8 +25,10 @@ public class PeliculaDAOImp implements PeliculaDAO {
                         rs.getBytes("imagen"),
                         rs.getString("titulo"),
                         rs.getString("clasificacion"),
+                        rs.getString("Descripcion"),
                         rs.getInt("stock")
-                ));
+
+                        ));
             }
         } catch (SQLException e) {
             Alertas.mostrarError("Error al obtener películas");

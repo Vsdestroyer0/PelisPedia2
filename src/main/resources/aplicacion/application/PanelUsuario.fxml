@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -22,7 +21,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtBusqueda" layoutX="378.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" />
+      <TextField fx:id="txtBusqueda" layoutX="378.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" style="-fx-border-radius: 20;" />
 
       <!-- Tabla de Películas -->
       <TableView fx:id="tablaPeliculas" layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0">
@@ -49,9 +48,6 @@
             </TableColumn>
          </columns>
       </TableView>
-
-      <!-- Barra Lateral -->
-      <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="18.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="609.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="89.0" />
 
       <!-- Botones de Navegación -->

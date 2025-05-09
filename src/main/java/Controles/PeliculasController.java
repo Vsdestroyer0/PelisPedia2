@@ -17,71 +17,99 @@ import java.io.ByteArrayInputStream;
 
 public class PeliculasController {
 
-    @FXML private TableView<PeliculaVO> tablaPeliculas;
-    @FXML private TableColumn<PeliculaVO, ImageView> colImagen;
-    @FXML private TableColumn<PeliculaVO, String> colTitulo;
-    @FXML private TableColumn<PeliculaVO, String> colClasificacion;
-    @FXML private TableColumn<PeliculaVO, Integer> colStock;
-    @FXML private TextField txtBusqueda;
+    @FXML
+    private TableView<PeliculaVO> tablePeliculas;
+
+    @FXML
+    private TableColumn<PeliculaVO, String> colNombrePlanta;
+
+    @FXML
+    private TableColumn<PeliculaVO, String> colDescripcionPlanta;
+
+
+    @FXML
+    private TableColumn<PeliculaVO, String> colPropiedades;
+
+    @FXML
+    private TableColumn<PeliculaVO, String> colEfectosSecundarios;
+
+    @FXML
+    private ObservableList<PeliculaVO> plantasList;
+
+    @FXML
+    private TextField txtNombrePlanta;
+
+    @FXML
+    private TextArea txtDescripcion;
+
+    @FXML
+    private TextField txtNombreCientifico;
+
+    @FXML
+    private TableColumn<PeliculaVO, byte[]> colImagen;
+
+    @FXML
+    private TextArea txtPropiedades;
+
+    @FXML
+    private TextArea txtEfecSecundarios;
+
+    @FXML
+    private ImageView imgPreview;
+    private byte[] currentImageBytes;
 
     private PeliculaDAO peliculaDAO = new PeliculaDAOImp();
     private ObservableList<PeliculaVO> listaPeliculas = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        configurarColumnas();
-        cargarPeliculas();
-        configurarBusqueda();
-    }
+        // Inicializar la lista observable
+        plantasList = FXCollections.observableArrayList();
 
-    private void configurarColumnas() {
-        // Configurar celda de imagen
+        // 1. Configuración de columnas de texto
+        colNombrePlanta.setCellValueFactory(new PropertyValueFactory<>("Titulo"));
+        colDescripcionPlanta.setCellValueFactory(new PropertyValueFactory<>("Clasificación"));
+        colEfectosSecundarios.setCellValueFactory(new PropertyValueFactory<>("Stock"));
+        colPropiedades.setCellValueFactory(new PropertyValueFactory<>("Descripción"));
+
+
+        // 2. Configuración columna de imagen (primera columna)
+        TableColumn<PeliculaVO, byte[]> colImagen = (TableColumn<PeliculaVO, byte[]>) tablePeliculas.getColumns().get(0);
         colImagen.setCellValueFactory(cellData -> {
-            byte[] imagenBytes = cellData.getValue().getImagen();
-            ImageView imageView = new ImageView();
-            if (imagenBytes != null) {
-                Image imagen = new Image(new ByteArrayInputStream(imagenBytes));
-                imageView.setImage(imagen);
-                imageView.setFitWidth(100);
-                imageView.setFitHeight(150);
+            byte[] imagenBytes = cellData.getValue().imagenProperty().get();
+            return new SimpleObjectProperty<>(imagenBytes);
+        });
+
+        // CellFactory para mostrar la imagen
+        colImagen.setCellFactory(column -> new TableCell<>() {
+            private final ImageView imageView = new ImageView();
+            {
+                imageView.setFitWidth(80);
+                imageView.setFitHeight(80);
                 imageView.setPreserveRatio(true);
             }
-            return new SimpleObjectProperty<>(imageView);
+
+            @Override
+            protected void updateItem(byte[] imagenBytes, boolean empty) {
+                super.updateItem(imagenBytes, empty);
+                if (empty || imagenBytes == null || imagenBytes.length == 0) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        Image image = new Image(new ByteArrayInputStream(imagenBytes));
+                        imageView.setImage(image);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        setGraphic(new Label("Error de imagen"));
+                        System.err.println("Error cargando imagen: " + e.getMessage());
+                    }
+                }
+            }
         });
-
-        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        colClasificacion.setCellValueFactory(new PropertyValueFactory<>("clasificacion"));
-        colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    }
-
-    private void cargarPeliculas() {
-        listaPeliculas.setAll(peliculaDAO.obtenerTodasPeliculas());
-        tablaPeliculas.setItems(listaPeliculas);
-    }
-
-    private void configurarBusqueda() {
-        FilteredList<PeliculaVO> filteredData = new FilteredList<>(listaPeliculas, p -> true);
-        txtBusqueda.textProperty().addListener((obs, oldVal, newVal) -> {
-            filteredData.setPredicate(pelicula -> {
-                if (newVal == null || newVal.isEmpty()) return true;
-                String lowerCaseFilter = newVal.toLowerCase();
-                return pelicula.getTitulo().toLowerCase().contains(lowerCaseFilter);
-            });
-        });
-        tablaPeliculas.setItems(filteredData);
     }
 
     @FXML
     private void handleRentarPelicula() {
-        PeliculaVO seleccionada = tablaPeliculas.getSelectionModel().getSelectedItem();
-        if (seleccionada != null && seleccionada.getStock() > 0) {
-            if (peliculaDAO.rentarPelicula("usuario@ejemplo.com", seleccionada.getIdPelicula())) {
-                cargarPeliculas();
-                Alertas.mostrarAdvertencia("Éxito Película rentada");
-            }
-        } else {
-            Alertas.mostrarError("Error, no hay stock disponible");
-        }
     }
 
     @FXML
