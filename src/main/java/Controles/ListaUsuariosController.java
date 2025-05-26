@@ -3,6 +3,7 @@ package Controles;
 import aplicacion.DAO.UsuarioDAO;
 import aplicacion.DAO.UsuarioDAOImp;
 import aplicacion.VO.UsuarioVO;
+import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -145,7 +146,7 @@ public class ListaUsuariosController implements Initializable {
             System.out.println("Usuarios obtenidos de la BD: " + datos.size());
             lista.addAll(datos);
         } catch (SQLException e) {
-            showError("No se pudieron cargar los usuarios: " + e.getMessage());
+            Alertas.mostrarError("No se pudieron cargar los usuarios: " + e.getMessage());
         }
     }
 
@@ -163,7 +164,7 @@ public class ListaUsuariosController implements Initializable {
             stage.setTitle("Crear Nuevo Usuario - PelisPedia");
             stage.show();
         } catch (IOException e) {
-            showError("Error al abrir la pantalla de creación de usuario: " + e.getMessage());
+            Alertas.mostrarError("Error al abrir la pantalla de creación de usuario: " + e.getMessage());
         }
     }
 
@@ -191,7 +192,7 @@ public class ListaUsuariosController implements Initializable {
                 String direccion = txtDireccion.getText() != null ? txtDireccion.getText().trim() : "";
                 
                 if (nombre.isEmpty() || correo.isEmpty() || direccion.isEmpty()) {
-                    showError("Todos los campos son obligatorios. Por favor complete la información.");
+                    Alertas.mostrarError("Todos los campos son obligatorios. Por favor complete la información.");
                     return;
                 }
                 
@@ -211,19 +212,19 @@ public class ListaUsuariosController implements Initializable {
                     if (usuarioDAO.actualizarUsuario(sel)) {
                         tablaUsuarios.refresh();
                         clearForm();
-                        showInfo("Usuario modificado correctamente.");
+                        Alertas.mostrarExito("Usuario modificado correctamente.");
                         // Recargar la lista para reflejar los cambios
                         loadUsuarios();
                     } else {
-                        showError("Error al actualizar usuario. Verifique la conexión a la base de datos.");
+                        Alertas.mostrarError("Error al actualizar usuario. Verifique la conexión a la base de datos.");
                     }
                 }
             } catch (Exception ex) {
-                showError("Error durante la modificación: " + ex.getMessage());
+                Alertas.mostrarError("Error durante la modificación: " + ex.getMessage());
                 ex.printStackTrace();
             }
         } else {
-            showError("Selecciona un usuario para modificar.");
+            Alertas.mostrarError("Selecciona un usuario para modificar.");
         }
     }
 
@@ -244,16 +245,16 @@ public class ListaUsuariosController implements Initializable {
                     if (usuarioDAO.eliminarUsuario(sel.getCorreo())) {
                         lista.remove(sel);
                         clearForm();
-                        showInfo("Usuario eliminado correctamente.");
+                        Alertas.mostrarExito("Usuario eliminado correctamente.");
                     } else {
-                        showError("Error al eliminar el usuario. Verifique la conexión a la base de datos.");
+                        Alertas.mostrarError("Error al eliminar el usuario. Verifique la conexión a la base de datos.");
                     }
                 } catch (Exception ex) {
-                    showError("Error durante la eliminación: " + ex.getMessage());
+                    Alertas.mostrarError("Error durante la eliminación: " + ex.getMessage());
                 }
             }
         } else {
-            showError("Selecciona un usuario válido para eliminar.");
+            Alertas.mostrarError("Selecciona un usuario válido para eliminar.");
         }
     }
 
@@ -297,7 +298,7 @@ public class ListaUsuariosController implements Initializable {
                 abrirPantallaInicio();
             }
         } catch (IOException ex) {
-            showError("Error al abrir el diálogo de cierre de sesión: " + ex.getMessage());
+            Alertas.mostrarError("Error al abrir el diálogo de cierre de sesión: " + ex.getMessage());
         }
     }
     
@@ -314,7 +315,7 @@ public class ListaUsuariosController implements Initializable {
             stage.setTitle("Inicio - PelisPedia");
             stage.show();
         } catch (IOException e) {
-            showError("Error al abrir la pantalla de inicio: " + e.getMessage());
+            Alertas.mostrarError("Error al abrir la pantalla de inicio: " + e.getMessage());
         }
     }
 

@@ -3,7 +3,6 @@ package Controles;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,12 +12,16 @@ import javafx.stage.Stage;
 import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
 
-public class MenuAdministradorController {
+public class MenuUsuarioController {
 
     @FXML
-    private Button ButtonPelis;
+    private Button ButtonCatalogo;
     @FXML
-    private Button ButtonUsers;
+    private Button ButtonMisRentas;
+    @FXML
+    private Button ButtonFav;
+    @FXML
+    private Button ButtonMiPerfil;
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
@@ -27,34 +30,31 @@ public class MenuAdministradorController {
 
     @FXML
     private void handleCatalogo() {
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Películas estará disponible pronto.");
+        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Catálogo estará disponible pronto.");
     }
 
     @FXML
-    private void handleUsuarios() {
-        try {
-            // Cerrar la ventana actual
-            Stage stage = (Stage) ButtonUsers.getScene().getWindow();
-            stage.close();
-            
-            // Cargar la vista de gestión de usuarios
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaUsuarios.fxml"));
-            Parent root = fxmlLoader.load();
-            
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setTitle("Gestión de Usuarios");
-            newStage.show();
-        } catch (IOException e) {
-            Alertas.mostrarError("Error al cargar la gestión de usuarios: " + e.getMessage());
-        }
+    private void handleMisRentas() {
+        // Implementar lógica para ver las rentas
+        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Mis Rentas estará disponible pronto.");
+    }
+
+    @FXML
+    private void handleFavoritos() {
+        // Implementar lógica para ver favoritos
+        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Favoritos estará disponible pronto.");
+    }
+
+    @FXML
+    private void handleMiPerfil() {
+        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Mi Perfil estará disponible pronto.");
     }
 
     @FXML
     private void handleCerrarSesion() {
         try {
             // Cerrar la ventana actual
-            Stage stage = (Stage) ButtonPelis.getScene().getWindow();
+            Stage stage = (Stage) ButtonMiPerfil.getScene().getWindow();
             stage.close();
             
             // Cargar la pantalla de inicio de sesión
