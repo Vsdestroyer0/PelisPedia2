@@ -328,13 +328,5 @@ public class ListaUsuariosController implements Initializable {
         tablaUsuarios.getSelectionModel().clearSelection();
     }
 
-    private void showError(String msg) {
-        Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
-        a.showAndWait();
-    }
 
-    private void showInfo(String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
-        a.showAndWait();
-    }
 }

@@ -31,7 +31,7 @@
                 </LinearGradient>
             </fill></Rectangle>
         <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#27254d" height="510.0" layoutX="31.0" layoutY="77.0" stroke="#8d8675" strokeType="INSIDE" strokeWidth="0.0" width="397.0" />
-        <Button id="ButtonPelis" layoutX="95.0" layoutY="179.0" mnemonicParsing="false" onAction="handleCatalogo" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Películas" textFill="WHITE">
+        <Button fx:id="ButtonPelis" layoutX="95.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleCatalogo" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Películas" textFill="WHITE">
             <font>
                 <Font size="16.0" />
             </font>
@@ -66,10 +66,15 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button id="ButtonUsers" layoutX="95.0" layoutY="266.0" mnemonicParsing="false" onAction="handleUsuarios" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Usuarios" textFill="WHITE">
+      <Button fx:id="ButtonUsers" layoutX="95.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleUsuarios" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Usuarios" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
+      <Label layoutX="595.0" layoutY="60.0" text="Administrador" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

@@ -171,7 +171,20 @@ public UsuarioVO autenticarUsuario(String username, String password) {
                         rs.getString("direccion"),
                         rs.getBoolean("esAdmin")
                 );
-                u.setRutaImagen(rs.getString("rutaImagen"));
+                
+                // Intentar obtener la ruta de imagen si existe la columna
+                try {
+                    String rutaImagen = rs.getString("rutaImagen");
+                    u.setRutaImagen(rutaImagen);
+                } catch (SQLException e) {
+                    // La columna no existe, establecer valor por defecto
+                    u.setRutaImagen(null);
+                    // Solo mostrar el error la primera vez
+                    if (lista.isEmpty()) {
+                        System.out.println("Aviso: La columna 'rutaImagen' no existe en la tabla Usuario. Se usarán imágenes por defecto.");
+                    }
+                }
+                
                 lista.add(u);
             }
         } catch (SQLException e) {

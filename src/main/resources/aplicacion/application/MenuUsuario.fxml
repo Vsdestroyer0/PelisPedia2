@@ -31,7 +31,7 @@
                 </LinearGradient>
             </fill></Rectangle>
         <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#27254d" height="510.0" layoutX="31.0" layoutY="77.0" stroke="#8d8675" strokeType="INSIDE" strokeWidth="0.0" width="397.0" />
-        <Button id="ButtonCatalogo" layoutX="95.0" layoutY="179.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Catálogo" textFill="WHITE" onAction="handleCatalogo">
+        <Button fx:id="ButtonCatalogo" layoutX="95.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleCatalogo" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Catálogo" textFill="WHITE">
             <font>
                 <Font size="16.0" />
             </font>
@@ -66,20 +66,25 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button id="ButtonMisRentas" layoutX="95.0" layoutY="266.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Mis rentas" textFill="WHITE" onAction="handleMisRentas">
+      <Button fx:id="ButtonMisRentas" layoutX="95.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleMisRentas" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Mis rentas" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button id="ButtonFav" layoutX="95.0" layoutY="346.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Favoritos" textFill="WHITE" onAction="handleFavoritos">
+      <Button fx:id="ButtonFav" layoutX="95.0" layoutY="346.0" mnemonicParsing="false" onAction="#handleFavoritos" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Favoritos" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button id="ButtonMiPerfil" layoutX="95.0" layoutY="432.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Mi perfil" textFill="WHITE" onAction="handleMiPerfil">
+      <Button fx:id="ButtonMiPerfil" layoutX="95.0" layoutY="432.0" mnemonicParsing="false" onAction="#handleMiPerfil" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Mi perfil" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
+      <Label layoutX="630.0" layoutY="60.0" text="Usuario" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

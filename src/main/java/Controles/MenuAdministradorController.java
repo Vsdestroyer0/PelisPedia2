@@ -28,6 +28,8 @@ public class MenuAdministradorController {
     @FXML
     private ImageView logoImageView;
 
+    
+
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
         // Inicialización de componentes si es necesario
@@ -35,22 +37,7 @@ public class MenuAdministradorController {
 
     @FXML
     private void handleCatalogo() {
-        try {
-            // Cerrar la ventana actual
-            Stage stage = (Stage) ButtonPelis.getScene().getWindow();
-            stage.close();
-            
-            // Cargar la vista del catálogo de películas
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            Parent root = fxmlLoader.load();
-            
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setTitle("Catálogo de Películas");
-            newStage.show();
-        } catch (IOException e) {
-            Alertas.mostrarError("Error al cargar el catálogo: " + e.getMessage());
-        }
+        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Catálogo estará disponible pronto.");
     }
 
     @FXML
@@ -61,7 +48,7 @@ public class MenuAdministradorController {
             stage.close();
             
             // Cargar la vista de gestión de usuarios
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaUsuarios.fxml"));
             Parent root = fxmlLoader.load();
             
             Stage newStage = new Stage();
