@@ -1,7 +1,7 @@
 package Controles;
 
-import aplicacion.DAO.PeliculaDAO;
-import aplicacion.DAO.PeliculaDAOImp;
+//import aplicacion.DAO.PeliculaDAO;
+//import aplicacion.DAO.PeliculaDAOImp;
 import aplicacion.VO.PeliculaVO;
 import aplicacion.Vistas.Alertas;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import java.io.ByteArrayInputStream;
 
 public class PeliculasController {
-
+/*
     @FXML
     private TableView<PeliculaVO> tablePeliculas;
 
@@ -116,5 +116,5 @@ public class PeliculasController {
     private void handleDevolverPelicula() {
         // Lógica para devolución similar a renta
     }
-
+*/
 }

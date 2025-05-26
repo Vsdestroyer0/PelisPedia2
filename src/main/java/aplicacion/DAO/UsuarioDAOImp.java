@@ -1,9 +1,9 @@
 package aplicacion.DAO;
 import aplicacion.VO.UsuarioVO;
 import aplicacion.BaseDatos.DatabaseConnection;
-import aplicacion.Vistas.Alertas;
-
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAOImp implements UsuarioDAO{
 
@@ -21,13 +21,13 @@ public class UsuarioDAOImp implements UsuarioDAO{
             ps.setString(4, usuario.getConfirmarContraseña());
             ps.setString(5, usuario.getPreguntaSeguridad());
             ps.setString(6, usuario.getRespuestaSeguridad());
-            ps.setString(7, usuario.getDirección());
+            ps.setString(7, usuario.getDireccion());
             ps.setBoolean(8, usuario.isAdmin());
 
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            Alertas.mostrarError("Error al agregar usuario");
+            System.out.println("Error al agregar usuario" + e.getMessage());
             return false;
         }
     }
@@ -46,26 +46,26 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 return mapearUsuario(rs);
             }
         } catch (SQLException e) {
-            Alertas.mostrarError("Error al obtener el correo");
+            System.err.println("Error al obtener usuario por correo: " + e.getMessage());
         }
         return null;
     }
 
-    // aplicacion/DAO/UsuarioDAOImp.java
     @Override
     public boolean actualizarUsuario(UsuarioVO usuario) {
-        String sql = "UPDATE Usuario SET contraseña = ?, confirmarContraseña = ? WHERE correo = ?";
+        String sql = "UPDATE Usuario SET nombre = ?, direccion = ?, rutaImagen = ? WHERE correo = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, usuario.getContraseña());
-            ps.setString(2, usuario.getConfirmarContraseña());
-            ps.setString(3, usuario.getCorreo());
+            ps.setString(1, usuario.getNombre());
+            ps.setString(2, usuario.getDireccion());
+            ps.setString(3, usuario.getRutaImagen());
+            ps.setString(4, usuario.getCorreo());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            Alertas.mostrarError("Error al actualizar contraseña");
+            System.err.println("Error al actualizar usuario: " + e.getMessage());
             return false;
         }
     }
@@ -81,7 +81,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            Alertas.mostrarError("Error al eliminar usuario");
+            System.err.println("Error al eliminar usuario: " + e.getMessage());
             return false;
         }
     }
@@ -110,7 +110,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 );
             }
         } catch (SQLException e) {
-            Alertas.mostrarError("Error en autentificación ");
+            System.err.println("Error en autenticación: " + e.getMessage());
         }
         return null;
     }
@@ -133,7 +133,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 return rs.getBoolean("esAdmin");
             }
         } catch (SQLException e) {
-            Alertas.mostrarError("Error al verificar admin");
+            System.err.println("Error al verificar admin: " + e.getMessage());
         }
         return false;
     }
@@ -150,6 +150,30 @@ public class UsuarioDAOImp implements UsuarioDAO{
         );
     }
 
+    public List<UsuarioVO> listarUsuarios() throws SQLException {
+        String sql = "SELECT * FROM Usuario WHERE esAdmin = false";
+        List<UsuarioVO> lista = new ArrayList<>();
+        try (Connection c = DatabaseConnection.getConnection();
+             Statement s = c.createStatement();
+             ResultSet rs = s.executeQuery(sql)) {
 
-
+            while (rs.next()) {
+                UsuarioVO u = new UsuarioVO(
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        null,
+                        rs.getString("preguntaSeguridad"),
+                        rs.getString("respuestaSeguridad"),
+                        rs.getString("direccion"),
+                        rs.getBoolean("esAdmin")
+                );
+                u.setRutaImagen(rs.getString("rutaImagen"));
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar usuarios: " + e.getMessage());
+            throw e;
+        }
+        return lista;
+    }
 }

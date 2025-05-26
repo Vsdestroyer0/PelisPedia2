@@ -10,8 +10,9 @@ public class UsuarioVO {
     private String respuestaSeguridad;
     private String dirección;
     private boolean admin;
+    private String rutaImagen;
 
-    // Constructor
+    // Constructor completo
     public UsuarioVO(String nombre, String correo, String contraseña,
                      String preguntaSeguridad, String respuestaSeguridad,
                      String dirección, boolean admin) {
@@ -23,6 +24,7 @@ public class UsuarioVO {
         this.respuestaSeguridad = respuestaSeguridad;
         this.dirección = dirección;
         this.admin = admin;
+        this.rutaImagen = null;
     }
 
     public String getNombre() {
@@ -73,11 +75,11 @@ public class UsuarioVO {
         this.respuestaSeguridad = respuestaSeguridad;
     }
 
-    public String getDirección() {
+    public String getDireccion() {
         return dirección;
     }
 
-    public void setDirección(String dirección) {
+    public void setDireccion(String dirección) {
         this.dirección = dirección;
     }
 
@@ -87,6 +89,14 @@ public class UsuarioVO {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 
     @Override
@@ -99,6 +109,7 @@ public class UsuarioVO {
                 ", respuestaSeguridad='" + respuestaSeguridad + '\'' +
                 ", dirección='" + dirección + '\'' +
                 ", admin=" + admin +
+                ", rutaImagen='" + rutaImagen + '\'' +
                 '}';
     }
 }

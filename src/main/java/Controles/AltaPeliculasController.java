@@ -2,7 +2,6 @@ package Controles;
 
 import aplicacion.VO.PeliculaVO;
 import aplicacion.Vistas.Alertas;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
