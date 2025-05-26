@@ -4,6 +4,7 @@ import aplicacion.BaseDatos.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import aplicacion.Vistas.Alertas;
 
 public class UsuarioDAOImp implements UsuarioDAO{
 
@@ -27,7 +28,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error al agregar usuario" + e.getMessage());
+            Alertas.mostrarError("Error al agregar usuario" + e.getMessage());
             return false;
         }
     }
@@ -46,7 +47,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 return mapearUsuario(rs);
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener usuario por correo: " + e.getMessage());
+            Alertas.mostrarError("Error al obtener usuario por correo: " + e.getMessage());
         }
         return null;
     }
@@ -65,7 +66,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar usuario: " + e.getMessage());
+            Alertas.mostrarError("Error al actualizar usuario: " + e.getMessage());
             return false;
         }
     }
@@ -81,40 +82,43 @@ public class UsuarioDAOImp implements UsuarioDAO{
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al eliminar usuario: " + e.getMessage());
+            Alertas.mostrarError("Error al eliminar usuario: " + e.getMessage());
             return false;
         }
     }
 
-    @Override
-    public UsuarioVO autenticarUsuario(String username, String password) {
-        String sql = "SELECT nombre, correo, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin FROM Usuario WHERE correo = ? AND contraseña = ?";
+@Override
+public UsuarioVO autenticarUsuario(String username, String password) {
+    String sql = "SELECT nombre, correo, contraseña, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin " +
+                "FROM Usuario WHERE correo = ?";
+    
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
 
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
+        if (rs.next()) {
+            String storedPassword = rs.getString("contraseña");
+            // Aquí deberías implementar la verificación de contraseña hasheada
+            if (password.equals(storedPassword)) { // Temporal - Reemplazar con verificación de hash
                 return new UsuarioVO(
-                        rs.getString("nombre"),
-                        rs.getString("correo"),
-                        null,
-                        rs.getString("preguntaSeguridad"),
-                        rs.getString("respuestaSeguridad"),
-                        rs.getString("direccion"),
-                        rs.getBoolean("esAdmin")
+                    rs.getString("nombre"),
+                    rs.getString("correo"),
+                    null, // No devolver la contraseña
+                    rs.getString("preguntaSeguridad"),
+                    rs.getString("respuestaSeguridad"),
+                    rs.getString("direccion"),
+                    rs.getBoolean("esAdmin")
                 );
             }
-        } catch (SQLException e) {
-            System.err.println("Error en autenticación: " + e.getMessage());
         }
-        return null;
-    }
+    } catch (SQLException e) {
+        Alertas.mostrarError("Error al autenticar usuario: " + e.getMessage());
 
+    }
+    return null;
+}
     @Override
     public boolean esAdmin(String username) {
         String sql = "{call obtener_admin(?, ?)}";
@@ -133,7 +137,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 return rs.getBoolean("esAdmin");
             }
         } catch (SQLException e) {
-            System.err.println("Error al verificar admin: " + e.getMessage());
+            Alertas.mostrarError("Error al verificar admin: " + e.getMessage());
         }
         return false;
     }
@@ -171,7 +175,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
                 lista.add(u);
             }
         } catch (SQLException e) {
-            System.err.println("Error al listar usuarios: " + e.getMessage());
+            Alertas.mostrarError("Error al listar usuarios: " + e.getMessage());
             throw e;
         }
         return lista;

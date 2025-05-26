@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
@@ -17,17 +18,39 @@ public class MenuAdministradorController {
 
     @FXML
     private Button ButtonPelis;
+    
     @FXML
     private Button ButtonUsers;
+    
+    @FXML
+    private ImageView userImageView;
+    
+    @FXML
+    private ImageView logoImageView;
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
-        // Inicialización si es necesaria
+        // Inicialización de componentes si es necesario
     }
 
     @FXML
     private void handleCatalogo() {
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Películas estará disponible pronto.");
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) ButtonPelis.getScene().getWindow();
+            stage.close();
+            
+            // Cargar la vista del catálogo de películas
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            Parent root = fxmlLoader.load();
+            
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Catálogo de Películas");
+            newStage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al cargar el catálogo: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -38,7 +61,7 @@ public class MenuAdministradorController {
             stage.close();
             
             // Cargar la vista de gestión de usuarios
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaUsuarios.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
             Parent root = fxmlLoader.load();
             
             Stage newStage = new Stage();

@@ -21,11 +21,17 @@ public class HelloController {
     @FXML private TextField txtUsername;
     @FXML private TextField txtPassword;
 
-    @FXML
-    void handleLogin(ActionEvent event) {
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
+@FXML
+void handleLogin(ActionEvent event) {
+    String username = txtUsername.getText().trim();
+    String password = txtPassword.getText().trim();
 
+    if (username.isEmpty() || password.isEmpty()) {
+        Alertas.mostrarError("Por favor ingrese usuario y contraseña");
+        return;
+    }
+
+    try {
         UsuarioDAO usuarioDAO = new UsuarioDAOImp();
         UsuarioVO usuario = usuarioDAO.autenticarUsuario(username, password);
 
@@ -38,7 +44,10 @@ public class HelloController {
         } else {
             Alertas.mostrarError("Usuario o contraseña incorrectos");
         }
+    } catch (Exception e) {
+        Alertas.mostrarError("Error al conectar con la base de datos: " + e.getMessage());
     }
+}
 
     @FXML
     void handleRegister(ActionEvent event){
