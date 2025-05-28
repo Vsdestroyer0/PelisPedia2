@@ -10,7 +10,8 @@ public class UsuarioVO {
     private String respuestaSeguridad;
     private String dirección;
     private boolean admin;
-    private String rutaImagen;
+    private byte[] imagen;
+    private boolean activo;
 
     // Constructor completo
     public UsuarioVO(String nombre, String correo, String contraseña,
@@ -24,7 +25,8 @@ public class UsuarioVO {
         this.respuestaSeguridad = respuestaSeguridad;
         this.dirección = dirección;
         this.admin = admin;
-        this.rutaImagen = null;
+        this.imagen = null;
+        this.activo = true; // Por defecto, los usuarios están activos
     }
 
     public String getNombre() {
@@ -91,12 +93,20 @@ public class UsuarioVO {
         this.admin = admin;
     }
 
-    public String getRutaImagen() {
-        return rutaImagen;
+    public byte[] getImagen() {
+        return imagen;
     }
 
-    public void setRutaImagen(String rutaImagen) {
-        this.rutaImagen = rutaImagen;
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     @Override
@@ -109,7 +119,8 @@ public class UsuarioVO {
                 ", respuestaSeguridad='" + respuestaSeguridad + '\'' +
                 ", dirección='" + dirección + '\'' +
                 ", admin=" + admin +
-                ", rutaImagen='" + rutaImagen + '\'' +
+                ", imagen=" + (imagen != null ? "presente" : "ausente") +
+                ", activo=" + activo +
                 '}';
     }
 }

@@ -24,7 +24,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -45,17 +47,19 @@ public class ListaUsuariosController implements Initializable {
     @FXML private Button btnAgregar;
     @FXML private Button btnCerrarSesion;
     @FXML private AnchorPane rootPane;
+    @FXML private CheckBox chkActivo;
 
     @FXML private TableView<UsuarioVO> tablaUsuarios;
     @FXML private TableColumn<UsuarioVO, ImageView> colImagen;
     @FXML private TableColumn<UsuarioVO, String> colNombre;
     @FXML private TableColumn<UsuarioVO, String> colCorreo;
     @FXML private TableColumn<UsuarioVO, String> colDireccion;
+    @FXML private TableColumn<UsuarioVO, Boolean> colActivo;
 
     // Variables para gestión de datos
     private ObservableList<UsuarioVO> lista = FXCollections.observableArrayList();
     private UsuarioDAO usuarioDAO = new UsuarioDAOImp();
-    private String imagenPath;
+    private byte[] imagenBytes;
     
     // Imagen por defecto para usuarios sin imagen
     private final Image defaultUserImage = new Image(getClass().getResourceAsStream("/aplicacion/Imgs/LogoInicio.png"));
@@ -75,26 +79,22 @@ public class ListaUsuariosController implements Initializable {
                 txtNombre.setText(newSelection.getNombre());
                 txtCorreo.setText(newSelection.getCorreo());
                 txtDireccion.setText(newSelection.getDireccion());
+                chkActivo.setSelected(newSelection.isActivo());
                 
                 // Cargar imagen si existe
-                if (newSelection.getRutaImagen() != null && !newSelection.getRutaImagen().isEmpty()) {
+                if (newSelection.getImagen() != null) {
                     try {
-                        File f = new File(newSelection.getRutaImagen());
-                        if (f.exists()) {
-                            imagenPath = newSelection.getRutaImagen();
-                            imgPreview.setImage(new Image(f.toURI().toString()));
-                        } else {
-                            imgPreview.setImage(defaultUserImage);
-                            imagenPath = null;
-                        }
+                        imagenBytes = newSelection.getImagen();
+                        Image image = new Image(new ByteArrayInputStream(imagenBytes));
+                        imgPreview.setImage(image);
                     } catch (Exception e) {
                         System.err.println("Error al cargar imagen: " + e.getMessage());
                         imgPreview.setImage(defaultUserImage);
-                        imagenPath = null;
+                        imagenBytes = null;
                     }
                 } else {
                     imgPreview.setImage(defaultUserImage);
-                    imagenPath = null;
+                    imagenBytes = null;
                 }
             }
         });
@@ -105,6 +105,20 @@ public class ListaUsuariosController implements Initializable {
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
         colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        colActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
+        
+        // Formatear cómo se muestra la columna de activo
+        colActivo.setCellFactory(col -> new TableCell<UsuarioVO, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item ? "Activo" : "Inactivo");
+                }
+            }
+        });
         
         // Configurar la columna de imagen
         colImagen.setCellValueFactory(cellData -> {
@@ -113,22 +127,16 @@ public class ListaUsuariosController implements Initializable {
             imageView.setFitHeight(50);
             imageView.setFitWidth(50);
             
-            if (usuario.getRutaImagen() != null && !usuario.getRutaImagen().isEmpty()) {
+            if (usuario.getImagen() != null) {
                 try {
-                    File f = new File(usuario.getRutaImagen());
-                    if (f.exists()) {
-                        Image img = new Image(f.toURI().toString(), 50, 50, true, true);
-                        imageView.setImage(img);
-                    } else {
-                        // Imagen por defecto si no existe
-                        imageView.setImage(defaultUserImage);
-                    }
+                    Image img = new Image(new ByteArrayInputStream(usuario.getImagen()), 50, 50, true, true);
+                    imageView.setImage(img);
                 } catch (Exception e) {
                     System.err.println("Error cargando imagen: " + e.getMessage());
                     imageView.setImage(defaultUserImage);
                 }
             } else {
-                // Imagen por defecto si no hay ruta
+                // Imagen por defecto si no hay datos de imagen
                 imageView.setImage(defaultUserImage);
             }
             
@@ -176,8 +184,18 @@ public class ListaUsuariosController implements Initializable {
         );
         File f = fc.showOpenDialog(btnSeleccionarImagen.getScene().getWindow());
         if (f != null) {
-            imagenPath = f.getAbsolutePath();
-            imgPreview.setImage(new Image(f.toURI().toString()));
+            try {
+                // Leer el archivo como bytes para almacenar en LONGBLOB
+                try (FileInputStream fis = new FileInputStream(f)) {
+                    imagenBytes = new byte[(int) f.length()];
+                    fis.read(imagenBytes);
+                }
+                
+                // Mostrar la imagen seleccionada
+                imgPreview.setImage(new Image(f.toURI().toString()));
+            } catch (IOException ex) {
+                Alertas.mostrarError("Error al leer la imagen: " + ex.getMessage());
+            }
         }
     }
 
@@ -190,6 +208,7 @@ public class ListaUsuariosController implements Initializable {
                 String nombre = txtNombre.getText() != null ? txtNombre.getText().trim() : "";
                 String correo = txtCorreo.getText() != null ? txtCorreo.getText().trim() : "";
                 String direccion = txtDireccion.getText() != null ? txtDireccion.getText().trim() : "";
+                boolean activo = chkActivo.isSelected();
                 
                 if (nombre.isEmpty() || correo.isEmpty() || direccion.isEmpty()) {
                     Alertas.mostrarError("Todos los campos son obligatorios. Por favor complete la información.");
@@ -207,7 +226,12 @@ public class ListaUsuariosController implements Initializable {
                     sel.setNombre(nombre);
                     sel.setCorreo(correo);
                     sel.setDireccion(direccion);
-                    sel.setRutaImagen(imagenPath);
+                    sel.setActivo(activo);
+                    
+                    // Solo actualizar la imagen si se ha seleccionado una nueva
+                    if (imagenBytes != null) {
+                        sel.setImagen(imagenBytes);
+                    }
                     
                     if (usuarioDAO.actualizarUsuario(sel)) {
                         tablaUsuarios.refresh();
@@ -255,6 +279,54 @@ public class ListaUsuariosController implements Initializable {
             }
         } else {
             Alertas.mostrarError("Selecciona un usuario válido para eliminar.");
+        }
+    }
+
+    @FXML
+    private void handleActivarDesactivarUsuario(ActionEvent e) {
+        UsuarioVO usuarioSeleccionado = tablaUsuarios.getSelectionModel().getSelectedItem();
+        if (usuarioSeleccionado != null) {
+            try {
+                // Cambiar el estado actual del usuario (activar/desactivar)
+                boolean nuevoEstado = !usuarioSeleccionado.isActivo();
+                
+                // Confirmar la acción con el usuario
+                String accion = nuevoEstado ? "activar" : "desactivar";
+                Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmacion.setTitle("Confirmar cambio de estado");
+                confirmacion.setHeaderText("¿Está seguro de " + accion + " este usuario?");
+                confirmacion.setContentText("Esta acción " + accion + "á al usuario " + usuarioSeleccionado.getNombre() + 
+                                          " con correo " + usuarioSeleccionado.getCorreo());
+                
+                Optional<ButtonType> result = confirmacion.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // Actualizar el estado del usuario
+                    usuarioSeleccionado.setActivo(nuevoEstado);
+                    
+                    // Guardar el cambio en la base de datos
+                    if (usuarioDAO.actualizarUsuario(usuarioSeleccionado)) {
+                        // Actualizar la tabla
+                        tablaUsuarios.refresh();
+                        
+                        // Actualizar el CheckBox si el usuario que se está modificando está seleccionado
+                        if (chkActivo != null) {
+                            chkActivo.setSelected(nuevoEstado);
+                        }
+                        
+                        Alertas.mostrarExito("Usuario " + (nuevoEstado ? "activado" : "desactivado") + " correctamente.");
+                        
+                        // Recargar la lista para reflejar los cambios
+                        loadUsuarios();
+                    } else {
+                        Alertas.mostrarError("Error al " + accion + " el usuario. Verifique la conexión a la base de datos.");
+                    }
+                }
+            } catch (Exception ex) {
+                Alertas.mostrarError("Error durante la modificación: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            Alertas.mostrarError("Selecciona un usuario para " + (usuarioSeleccionado != null && usuarioSeleccionado.isActivo() ? "desactivar" : "activar") + ".");
         }
     }
 
@@ -324,9 +396,8 @@ public class ListaUsuariosController implements Initializable {
         txtCorreo.clear();
         txtDireccion.clear();
         imgPreview.setImage(defaultUserImage);
-        imagenPath = null;
+        imagenBytes = null;
+        chkActivo.setSelected(true);
         tablaUsuarios.getSelectionModel().clearSelection();
     }
-
-
 }

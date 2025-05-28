@@ -11,6 +11,9 @@ CREATE TABLE Usuario (
     esAdmin boolean default false,
     PRIMARY KEY(correo)
 );
+alter table Usuario add column Imagen longblob;
+alter table Usuario add column Activo boolean;
+
 
 CREATE TABLE peliculasGeneral (
     id_pelicula INT AUTO_INCREMENT, -- Identificador único para cada película

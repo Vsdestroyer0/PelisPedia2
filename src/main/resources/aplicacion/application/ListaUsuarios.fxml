@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -19,7 +20,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.ListaUsuariosController">
+<AnchorPane fx:id="rootPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.ListaUsuariosController">
    <children>
       <!-- Fondo con gradiente similar a CrearCuenta.fxml -->
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="768.0" stroke="BLACK" strokeType="INSIDE" width="1024.0">
@@ -65,9 +66,7 @@
             <HBox HBox.hgrow="ALWAYS" />
             
             <!-- Botón de cerrar sesión -->
-            <Button fx:id="btnCerrarSesion" onAction="#handleCerrarSesion" 
-                    style="-fx-background-color: transparent; -fx-background-radius: 20; -fx-cursor: hand;" 
-                    text="Cerrar Sesión" textFill="WHITE">
+            <Button fx:id="btnCerrarSesion" onAction="#handleCerrarSesion" style="-fx-background-color: transparent; -fx-background-radius: 20; -fx-cursor: hand;" text="Cerrar Sesión" textFill="WHITE">
                <font>
                   <Font size="16.0" />
                </font>
@@ -103,8 +102,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtNombre" prefHeight="38.0" prefWidth="300.0" 
-                             style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;">
+                  <TextField fx:id="txtNombre" prefHeight="38.0" prefWidth="300.0" style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;">
                      <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0">
                            <color>
@@ -130,8 +128,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtCorreo" prefHeight="38.0" prefWidth="300.0" 
-                             style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;">
+                  <TextField fx:id="txtCorreo" prefHeight="38.0" prefWidth="300.0" style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;">
                      <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0">
                            <color>
@@ -157,8 +154,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtDireccion" prefHeight="38.0" prefWidth="300.0" 
-                             style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;">
+                  <TextField fx:id="txtDireccion" prefHeight="38.0" prefWidth="300.0" style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;">
                      <effect>
                         <DropShadow height="5.0" radius="2.0" width="5.0">
                            <color>
@@ -173,6 +169,22 @@
                         <Insets left="15.0" right="15.0" />
                      </padding>
                   </TextField>
+               </children>
+            </VBox>
+            
+            <!-- Campo Estado del Usuario -->
+            <VBox spacing="8.0">
+               <children>
+                  <Label text="Estado del usuario:" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="chkActivo" selected="true" text="Usuario activo" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
                </children>
             </VBox>
          </children>
@@ -194,9 +206,7 @@
       </StackPane>
       
       <!-- Botón Seleccionar imagen al lado de la imagen -->
-      <Button fx:id="btnSeleccionarImagen" layoutX="620.0" layoutY="230.0" onAction="#handleSeleccionarImagen" 
-              style="-fx-background-color: #f0f0f0; -fx-background-radius: 20; -fx-cursor: hand;" 
-              text="Seleccionar imagen">
+      <Button fx:id="btnSeleccionarImagen" layoutX="620.0" layoutY="230.0" onAction="#handleSeleccionarImagen" style="-fx-background-color: #f0f0f0; -fx-background-radius: 20; -fx-cursor: hand;" text="Seleccionar imagen">
          <padding>
             <Insets bottom="12.0" left="20.0" right="20.0" top="12.0" />
          </padding>
@@ -216,7 +226,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="2.0" layoutX="40.0" layoutY="380.0" opacity="0.2" stroke="TRANSPARENT" width="944.0" />
 
       <!-- Título de la tabla -->
-      <Label layoutX="40.0" layoutY="400.0" text="Lista de Usuarios" textFill="WHITE">
+      <Label layoutX="40.0" layoutY="415.0" text="Lista de Usuarios" textFill="WHITE">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -225,9 +235,7 @@
       <!-- Botones de acción en horizontal -->
       <HBox alignment="CENTER" layoutX="560.0" layoutY="400.0" spacing="30.0">
          <children>
-            <Button fx:id="btnAgregar" minWidth="110.0" mnemonicParsing="false" onAction="#handleAgregarUsuario" 
-                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" 
-                    text="Agregar">
+            <Button fx:id="btnAgregar" minWidth="110.0" mnemonicParsing="false" onAction="#handleAgregarUsuario" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Agregar">
                <font>
                   <Font size="16.0" />
                </font>
@@ -243,9 +251,7 @@
                </effect>
             </Button>
             
-            <Button fx:id="btnModificar" minWidth="110.0" mnemonicParsing="false" onAction="#handleModificarUsuario" 
-                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" 
-                    text="Modificar">
+            <Button fx:id="btnModificar" minWidth="110.0" mnemonicParsing="false" onAction="#handleModificarUsuario" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Modificar">
                <font>
                   <Font size="16.0" />
                </font>
@@ -261,9 +267,7 @@
                </effect>
             </Button>
             
-            <Button fx:id="btnEliminar" minWidth="110.0" mnemonicParsing="false" onAction="#handleEliminarUsuario" 
-                    style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" 
-                    text="Eliminar">
+            <Button fx:id="btnEliminar" minWidth="110.0" mnemonicParsing="false" onAction="#handleEliminarUsuario" style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Eliminar">
                <font>
                   <Font size="16.0" />
                </font>
@@ -282,13 +286,14 @@
       </HBox>
 
       <!-- Tabla de usuarios mejorada -->
-      <TableView fx:id="tablaUsuarios" layoutX="40.0" layoutY="450.0" prefHeight="290.0" prefWidth="944.0" 
-                 style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-background-radius: 10;">
+      <TableView fx:id="tablaUsuarios" layoutX="40.0" layoutY="450.0" prefHeight="290.0" prefWidth="944.0" style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-background-radius: 10;">
+
          <columns>
             <TableColumn fx:id="colImagen" prefWidth="100.0" text="Imagen" />
             <TableColumn fx:id="colNombre" prefWidth="240.0" text="Nombre" />
             <TableColumn fx:id="colCorreo" prefWidth="240.0" text="Correo" />
-            <TableColumn fx:id="colDireccion" prefWidth="364.0" text="Dirección" />
+            <TableColumn fx:id="colDireccion" prefWidth="266.0" text="Dirección" />
+            <TableColumn fx:id="colActivo" prefWidth="97.0" text="Activo?" />
          </columns>
          <effect>
             <DropShadow height="10.0" radius="4.5" width="10.0">
@@ -298,5 +303,20 @@
             </DropShadow>
          </effect>
       </TableView>
+      <Button fx:id="btnAgregar1" layoutX="420.0" layoutY="400.0" minWidth="110.0" mnemonicParsing="false" onAction="#handleActivarDesactivarUsuario" style="-fx-background-color: gray; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="(Des)Activar">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+         </padding>
+         <effect>
+            <DropShadow height="5.0" radius="2.0" width="5.0">
+               <color>
+                  <Color opacity="0.25" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Button>
    </children>
 </AnchorPane>

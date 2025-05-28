@@ -40,25 +40,45 @@ public class MenuAdministradorController {
         Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Catálogo estará disponible pronto.");
     }
 
-    @FXML
-    private void handleUsuarios() {
+@FXML
+private void handleUsuarios() {
+    try {
+        // Cerrar la ventana actual
+        Stage stage = (Stage) ButtonUsers.getScene().getWindow();
+        stage.close();
+        
+        // Intentar diferentes rutas para cargar el FXML
+        FXMLLoader fxmlLoader = null;
+        
         try {
-            // Cerrar la ventana actual
-            Stage stage = (Stage) ButtonUsers.getScene().getWindow();
-            stage.close();
+            // Intento 1: Ruta relativa estándar
+            fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaUsuarios.fxml"));
+            if (fxmlLoader.getLocation() == null) {
+                // Intento 2: Ruta completa
+                fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("aplicacion/application/ListaUsuarios.fxml"));
+            }
             
-            // Cargar la vista de gestión de usuarios
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaUsuarios.fxml"));
+            if (fxmlLoader.getLocation() == null) {
+                throw new IOException("No se pudo encontrar el archivo FXML");
+            }
+            
+            // Mostrar la ruta encontrada (para diagnóstico)
+            Alertas.mostrarExito("FXML encontrado en: " + fxmlLoader.getLocation());
+            
             Parent root = fxmlLoader.load();
-            
             Stage newStage = new Stage();
             newStage.setScene(new Scene(root));
             newStage.setTitle("Gestión de Usuarios");
             newStage.show();
         } catch (IOException e) {
-            Alertas.mostrarError("Error al cargar la gestión de usuarios: " + e.getMessage());
+            Alertas.mostrarError("Error al cargar el FXML: " + e.getMessage());
+            e.printStackTrace(); // Mostrar stack trace para diagnóstico
         }
+    } catch (Exception e) {
+        Alertas.mostrarError("Error general: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 
     @FXML
     private void handleCerrarSesion() {

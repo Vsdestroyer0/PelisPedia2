@@ -97,7 +97,7 @@
                 <Font size="16.0" />
             </font>
         </Button>
-        <Rectangle arcWidth="30.0" fill="#140d4a" height="226.0" layoutX="518.0" layoutY="374.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="386.0" />
+        <Rectangle arcWidth="30.0" fill="#140d4a" height="226.0" layoutX="518.0" layoutY="374.0" stroke="#ffffff50" strokeType="INSIDE" strokeWidth="0.0" width="386.0" />
         <Label alignment="CENTER" layoutX="552.0" layoutY="415.0" prefHeight="30.0" prefWidth="323.0" text="Forma parte de la comunidad de" textFill="WHITE">
             <font>
                 <Font size="20.0" />
@@ -153,5 +153,24 @@
          </font>
       </Label>
       <TextField id="txtAddress" fx:id="txtAddress" layoutX="38.0" layoutY="519.0" prefHeight="25.0" prefWidth="280.0" style="-fx-background-radius: 20;" />
+      
+      <!-- Contenedor de imagen con fondo -->
+      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#140d4a" height="81.0" layoutX="400.0" layoutY="369.0" stroke="#ffffff50" strokeType="INSIDE" width="105.0" />
+      <!-- ImageView para vista previa de la imagen seleccionada -->
+      <ImageView fx:id="imgPreview" fitHeight="65.0" fitWidth="94.0" layoutX="403.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true" />
+      
+      <!-- Label para imagen de perfil -->
+      <Label layoutX="395.0" layoutY="340.0" text="Imagen de perfil" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      
+      <!-- Botón para seleccionar imagen -->
+      <Button fx:id="SeleccionImagen" layoutX="383.0" layoutY="458.0" mnemonicParsing="false" style="-fx-background-color: LIGHTGRAY; -fx-background-radius: 20;" text="Selecciona imagen">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

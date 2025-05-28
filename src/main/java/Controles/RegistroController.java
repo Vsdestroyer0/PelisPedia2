@@ -12,8 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class RegistroController {
@@ -30,9 +35,12 @@ public class RegistroController {
     @FXML private Button btnTogglePassword1;
     @FXML private Button btnTogglePassword2;
     @FXML private Button btnRegistrar; // Botón para registrar
+    @FXML private Button SeleccionImagen; // Botón para seleccionar imagen
+    @FXML private ImageView imgPreview; // Vista previa de la imagen (si existe en el FXML)
 
     private boolean passwordVisible = false;
     private boolean confirmPasswordVisible = false;
+    private byte[] imagenBytes = null; // Para almacenar la imagen seleccionada
 
     // Instancia del DAO para manipular usuarios
     private UsuarioDAO usuarioDAO;
@@ -63,6 +71,9 @@ public class RegistroController {
 
         // Asignar el manejador de eventos al botón de registro
         btnRegistrar.setOnAction(this::handleRegister);
+        
+        // Asignar el manejador para seleccionar imagen
+        SeleccionImagen.setOnAction(this::handleSeleccionarImagen);
     }
 
     @FXML
@@ -84,6 +95,41 @@ public class RegistroController {
             txtVisibleConfirmPassword.setVisible(confirmPasswordVisible);
             txtVisibleConfirmPassword.setText(txtConfirmPassword.getText());
             btnTogglePassword2.setText(confirmPasswordVisible ? "🔒" : "👁");
+        }
+    }
+    
+    
+    @FXML
+    private void handleSeleccionarImagen(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar Imagen de Perfil");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+        );
+        
+        // Obtener la ventana actual
+        Stage stage = (Stage) SeleccionImagen.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        
+        if (selectedFile != null) {
+            try {
+                // Leer la imagen como bytes para almacenar en la base de datos
+                try (FileInputStream fis = new FileInputStream(selectedFile)) {
+                    imagenBytes = new byte[(int) selectedFile.length()];
+                    fis.read(imagenBytes);
+                }
+                
+                // Mostrar vista previa si hay un ImageView configurado
+                if (imgPreview != null) {
+                    Image image = new Image(selectedFile.toURI().toString());
+                    imgPreview.setImage(image);
+                }
+                
+                Alertas.mostrarExito("Imagen seleccionada correctamente");
+            } catch (IOException e) {
+                Alertas.mostrarError("Error al leer la imagen: " + e.getMessage());
+                imagenBytes = null;
+            }
         }
     }
 
@@ -124,8 +170,16 @@ public class RegistroController {
                     txtSecurityQuestion.getText(),
                     txtSecurityAnswer.getText(),
                     txtAddress.getText(),
-                    false
+                    false // No es admin por defecto
             );
+            
+            // Asignar la imagen si fue seleccionada
+            if (imagenBytes != null) {
+                nuevoUsuario.setImagen(imagenBytes);
+            }
+            
+            // Asegurarse de que el usuario está activo por defecto
+            nuevoUsuario.setActivo(true);
 
             // Registrar en base de datos
             if (usuarioDAO.AgregarUsuario(nuevoUsuario)) {
@@ -153,6 +207,12 @@ public class RegistroController {
         txtSecurityQuestion.clear();
         txtSecurityAnswer.clear();
         txtAddress.clear();
+        
+        // Limpiar imagen si hay vista previa
+        if (imgPreview != null) {
+            imgPreview.setImage(null);
+        }
+        imagenBytes = null;
     }
 
     @FXML

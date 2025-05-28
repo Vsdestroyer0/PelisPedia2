@@ -11,7 +11,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
     @Override
     public boolean AgregarUsuario(UsuarioVO usuario) {
         String sql = "insert into Usuario (nombre, correo, contraseña, confirmarContraseña, preguntaSeguridad, respuestaSeguridad," +
-                "direccion, esAdmin) values (?, ?, ?, ?, ?, ?, ?, ?)";
+                "direccion, esAdmin, activo) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
@@ -24,8 +24,22 @@ public class UsuarioDAOImp implements UsuarioDAO{
             ps.setString(6, usuario.getRespuestaSeguridad());
             ps.setString(7, usuario.getDireccion());
             ps.setBoolean(8, usuario.isAdmin());
+            ps.setBoolean(9, usuario.isActivo());
 
-            return ps.executeUpdate() > 0;
+            // Si hay imagen, añadirla después de la inserción
+            int resultado = ps.executeUpdate();
+            
+            if (resultado > 0 && usuario.getImagen() != null) {
+                // Actualizar la imagen en un segundo paso
+                String updateImagen = "UPDATE Usuario SET Imagen = ? WHERE correo = ?";
+                try (PreparedStatement psImg = conn.prepareStatement(updateImagen)) {
+                    psImg.setBytes(1, usuario.getImagen());
+                    psImg.setString(2, usuario.getCorreo());
+                    psImg.executeUpdate();
+                }
+            }
+            
+            return resultado > 0;
 
         } catch (SQLException e) {
             Alertas.mostrarError("Error al agregar usuario" + e.getMessage());
@@ -54,17 +68,29 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
     @Override
     public boolean actualizarUsuario(UsuarioVO usuario) {
-        String sql = "UPDATE Usuario SET nombre = ?, direccion = ?, rutaImagen = ? WHERE correo = ?";
-
+        String sql = "UPDATE Usuario SET nombre = ?, direccion = ?, activo = ? WHERE correo = ?";
+        
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getDireccion());
-            ps.setString(3, usuario.getRutaImagen());
+            ps.setBoolean(3, usuario.isActivo());
             ps.setString(4, usuario.getCorreo());
-
-            return ps.executeUpdate() > 0;
+            
+            boolean resultado = ps.executeUpdate() > 0;
+            
+            // Si hay imagen, actualizarla en una consulta separada
+            if (resultado && usuario.getImagen() != null) {
+                String updateImagen = "UPDATE Usuario SET Imagen = ? WHERE correo = ?";
+                try (PreparedStatement psImg = conn.prepareStatement(updateImagen)) {
+                    psImg.setBytes(1, usuario.getImagen());
+                    psImg.setString(2, usuario.getCorreo());
+                    psImg.executeUpdate();
+                }
+            }
+            
+            return resultado;
         } catch (SQLException e) {
             Alertas.mostrarError("Error al actualizar usuario: " + e.getMessage());
             return false;
@@ -89,7 +115,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
 @Override
 public UsuarioVO autenticarUsuario(String username, String password) {
-    String sql = "SELECT nombre, correo, contraseña, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin " +
+    String sql = "SELECT nombre, correo, contraseña, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin, activo " +
                 "FROM Usuario WHERE correo = ?";
     
     try (Connection conn = DatabaseConnection.getConnection();
@@ -100,9 +126,16 @@ public UsuarioVO autenticarUsuario(String username, String password) {
 
         if (rs.next()) {
             String storedPassword = rs.getString("contraseña");
+            // Verificar que el usuario esté activo
+            boolean activo = rs.getBoolean("activo");
+            if (!activo) {
+                Alertas.mostrarError("La cuenta está desactivada. Contacte con el administrador.");
+                return null;
+            }
+            
             // Aquí deberías implementar la verificación de contraseña hasheada
             if (password.equals(storedPassword)) { // Temporal - Reemplazar con verificación de hash
-                return new UsuarioVO(
+                UsuarioVO usuario = new UsuarioVO(
                     rs.getString("nombre"),
                     rs.getString("correo"),
                     null, // No devolver la contraseña
@@ -111,11 +144,23 @@ public UsuarioVO autenticarUsuario(String username, String password) {
                     rs.getString("direccion"),
                     rs.getBoolean("esAdmin")
                 );
+                usuario.setActivo(activo);
+                
+                // Obtener la imagen en una consulta separada para mejorar rendimiento
+                String imgSql = "SELECT Imagen FROM Usuario WHERE correo = ?";
+                try (PreparedStatement imgPs = conn.prepareStatement(imgSql)) {
+                    imgPs.setString(1, username);
+                    ResultSet imgRs = imgPs.executeQuery();
+                    if (imgRs.next()) {
+                        usuario.setImagen(imgRs.getBytes("Imagen"));
+                    }
+                }
+                
+                return usuario;
             }
         }
     } catch (SQLException e) {
         Alertas.mostrarError("Error al autenticar usuario: " + e.getMessage());
-
     }
     return null;
 }
@@ -143,7 +188,7 @@ public UsuarioVO autenticarUsuario(String username, String password) {
     }
 
     private UsuarioVO mapearUsuario(ResultSet rs) throws SQLException {
-        return new UsuarioVO(
+        UsuarioVO usuario = new UsuarioVO(
                 rs.getString("nombre"),
                 rs.getString("correo"),
                 null, // contraseña vacía por seguridad
@@ -152,6 +197,26 @@ public UsuarioVO autenticarUsuario(String username, String password) {
                 rs.getString("direccion"),
                 rs.getBoolean("esAdmin")
         );
+        
+        // Agregar el campo activo
+        try {
+            usuario.setActivo(rs.getBoolean("activo"));
+        } catch (SQLException e) {
+            // Si la columna no existe, establecer activo como true por defecto
+            usuario.setActivo(true);
+        }
+        
+        // Agregar la imagen si existe
+        try {
+            byte[] imagenBytes = rs.getBytes("Imagen");
+            if (imagenBytes != null) {
+                usuario.setImagen(imagenBytes);
+            }
+        } catch (SQLException e) {
+            // Si la columna no existe o hay error, la imagen queda como null
+        }
+        
+        return usuario;
     }
 
     public List<UsuarioVO> listarUsuarios() throws SQLException {
@@ -172,16 +237,24 @@ public UsuarioVO autenticarUsuario(String username, String password) {
                         rs.getBoolean("esAdmin")
                 );
                 
-                // Intentar obtener la ruta de imagen si existe la columna
+                // Obtener estado activo
                 try {
-                    String rutaImagen = rs.getString("rutaImagen");
-                    u.setRutaImagen(rutaImagen);
+                    u.setActivo(rs.getBoolean("activo"));
                 } catch (SQLException e) {
-                    // La columna no existe, establecer valor por defecto
-                    u.setRutaImagen(null);
-                    // Solo mostrar el error la primera vez
+                    // Si la columna no existe, establecer como true por defecto
+                    u.setActivo(true);
+                }
+                
+                // Obtener imagen
+                try {
+                    byte[] imagenBytes = rs.getBytes("Imagen");
+                    if (imagenBytes != null) {
+                        u.setImagen(imagenBytes);
+                    }
+                } catch (SQLException e) {
+                    // Si la columna no existe, la imagen queda como null
                     if (lista.isEmpty()) {
-                        System.out.println("Aviso: La columna 'rutaImagen' no existe en la tabla Usuario. Se usarán imágenes por defecto.");
+                        System.out.println("Aviso: La columna 'Imagen' no existe en la tabla Usuario. Se usarán imágenes por defecto.");
                     }
                 }
                 
