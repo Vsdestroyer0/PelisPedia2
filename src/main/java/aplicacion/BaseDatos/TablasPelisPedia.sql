@@ -150,8 +150,8 @@ DELIMITER ;
 
 USE PelisPedia;
 
-/*Ingresar usuarios*/
-insert into Usuario values ("a","a","12345678","12345678","Cuantos siglos tiene Daniel","300","Vicente Guerrero", true);
+/*Ingresar Admin*/
+insert into Usuario values ("Admin","Admin","12345678","12345678","Cuantos siglos tiene Daniel","300","Vicente Guerrero", true, "aa",true);
 
 /*Ingresar Pelis*/
 insert into peliculasGeneral values("Como entregar a tu dragon","","");
