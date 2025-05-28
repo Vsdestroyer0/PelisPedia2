@@ -97,7 +97,7 @@ public class RegistroController {
             btnTogglePassword2.setText(confirmPasswordVisible ? "🔒" : "👁");
         }
     }
-    
+
     
     @FXML
     private void handleSeleccionarImagen(ActionEvent event) {
@@ -234,8 +234,6 @@ public class RegistroController {
             if (loader.getLocation() == null) {
                 throw new IOException("No se pudo encontrar el archivo FXML: hello-view.fxml en la ruta esperada");
             }
-
-            Alertas.mostrarExito("Archivo FXML encontrado en: " + loader.getLocation() );
 
             AnchorPane pane = loader.load();
             Stage stage = new Stage();

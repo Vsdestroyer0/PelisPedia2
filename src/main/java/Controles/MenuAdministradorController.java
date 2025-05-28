@@ -37,7 +37,39 @@ public class MenuAdministradorController {
 
     @FXML
     private void handleCatalogo() {
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Catálogo estará disponible pronto.");
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) ButtonPelis.getScene().getWindow();
+            stage.close();
+            
+            // Intentar diferentes rutas para cargar el FXML
+            FXMLLoader fxmlLoader = null;
+            
+            try {
+                // Intento 1: Ruta relativa estándar
+                fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaPeliculas.fxml"));
+                if (fxmlLoader.getLocation() == null) {
+                    // Intento 2: Ruta completa
+                    fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("aplicacion/application/ListaPeliculas.fxml"));
+                }
+                
+                if (fxmlLoader.getLocation() == null) {
+                    throw new IOException("No se pudo encontrar el archivo FXML");
+                }
+                
+                Parent root = fxmlLoader.load();
+                Stage newStage = new Stage();
+                newStage.setScene(new Scene(root));
+                newStage.setTitle("Gestión de Películas");
+                newStage.show();
+            } catch (IOException e) {
+                Alertas.mostrarError("Error al cargar el FXML: " + e.getMessage());
+                e.printStackTrace(); // Mostrar stack trace para diagnóstico
+            }
+        } catch (Exception e) {
+            Alertas.mostrarError("Error general: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 @FXML
@@ -61,9 +93,6 @@ private void handleUsuarios() {
             if (fxmlLoader.getLocation() == null) {
                 throw new IOException("No se pudo encontrar el archivo FXML");
             }
-            
-            // Mostrar la ruta encontrada (para diagnóstico)
-            Alertas.mostrarExito("FXML encontrado en: " + fxmlLoader.getLocation());
             
             Parent root = fxmlLoader.load();
             Stage newStage = new Stage();
@@ -99,4 +128,42 @@ private void handleUsuarios() {
             Alertas.mostrarError("Error al cerrar sesión: " + e.getMessage());
         }
     }
+    
+    @FXML
+    private void handleTickets() {
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) ButtonPelis.getScene().getWindow();
+            stage.close();
+            
+            // Intentar diferentes rutas para cargar el FXML
+            FXMLLoader fxmlLoader = null;
+            
+            try {
+                // Intento 1: Ruta relativa estándar
+                fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaTickets.fxml"));
+                if (fxmlLoader.getLocation() == null) {
+                    // Intento 2: Ruta completa
+                    fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("aplicacion/application/ListaTickets.fxml"));
+                }
+                
+                if (fxmlLoader.getLocation() == null) {
+                    throw new IOException("No se pudo encontrar el archivo FXML para tickets");
+                }
+                
+                Parent root = fxmlLoader.load();
+                Stage newStage = new Stage();
+                newStage.setScene(new Scene(root));
+                newStage.setTitle("Gestión de Tickets");
+                newStage.show();
+            } catch (IOException e) {
+                Alertas.mostrarError("Error al cargar la pantalla de tickets: " + e.getMessage());
+                e.printStackTrace(); // Mostrar stack trace para diagnóstico
+            }
+        } catch (Exception e) {
+            Alertas.mostrarError("Error general: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
 }

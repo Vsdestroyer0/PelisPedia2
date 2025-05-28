@@ -266,7 +266,7 @@ public class ListaUsuariosController implements Initializable {
             Optional<ButtonType> result = confirmacion.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    if (usuarioDAO.eliminarUsuario(sel.getCorreo())) {
+                    if (usuarioDAO.eliminarUsuario(sel.getId())) {
                         lista.remove(sel);
                         clearForm();
                         Alertas.mostrarExito("Usuario eliminado correctamente.");

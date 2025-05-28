@@ -21,33 +21,33 @@ public class HelloController {
     @FXML private TextField txtUsername;
     @FXML private TextField txtPassword;
 
-@FXML
-void handleLogin(ActionEvent event) {
-    String username = txtUsername.getText().trim();
-    String password = txtPassword.getText().trim();
+    @FXML
+    void handleLogin(ActionEvent event) {
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
 
-    if (username.isEmpty() || password.isEmpty()) {
-        Alertas.mostrarError("Por favor ingrese usuario y contraseña");
-        return;
-    }
-
-    try {
-        UsuarioDAO usuarioDAO = new UsuarioDAOImp();
-        UsuarioVO usuario = usuarioDAO.autenticarUsuario(username, password);
-
-        if (usuario != null) {
-            if (usuario.isAdmin()) {
-                openAdminWindows();
-            } else {
-                openUsuarioWindow();
-            }
-        } else {
-            Alertas.mostrarError("Usuario o contraseña incorrectos");
+        if (username.isEmpty() || password.isEmpty()) {
+            Alertas.mostrarError("Por favor ingrese usuario y contraseña");
+            return;
         }
-    } catch (Exception e) {
-        Alertas.mostrarError("Error al conectar con la base de datos: " + e.getMessage());
+
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAOImp();
+            UsuarioVO usuario = usuarioDAO.autenticarUsuario(username, password);
+
+            if (usuario != null) {
+                if (usuario.isAdmin()) {
+                    openAdminWindows();
+                } else {
+                    openUsuarioWindow();
+                }
+            } else {
+                Alertas.mostrarError("Usuario o contraseña incorrectos");
+            }
+        } catch (Exception e) {
+            Alertas.mostrarError("Error al conectar con la base de datos: " + e.getMessage());
+        }
     }
-}
 
     @FXML
     void handleRegister(ActionEvent event){
@@ -62,7 +62,9 @@ void handleLogin(ActionEvent event) {
     @FXML
     private void openUsuarioWindow(){
         try{
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("PanelUsuario.fxml"));
+            // Usar la ruta correcta con la clase actual
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/application/MenuUsuario.fxml"));
+            
             Parent root = loader.load();
             Stage newStage = new Stage();
             newStage.setScene(new Scene(root));
@@ -70,25 +72,28 @@ void handleLogin(ActionEvent event) {
             ((Stage) txtUsername.getScene().getWindow()).close();
             newStage.show();
         } catch (IOException e) {
-            Alertas.mostrarError("Error al cargar el fxml de usuario" + e.getMessage());
+            Alertas.mostrarError("Error al cargar el fxml de usuario: " + e.getMessage());
+            e.printStackTrace(); // Mostrar la traza completa para diagnóstico
         }
     }
 
     @FXML
     private void openAdminWindows(){
         try{
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("MenuAdministrador.fxml"));
+            // Usar la ruta correcta con la clase actual
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/application/MenuAdministrador.fxml"));
+            
             Parent root = loader.load();
             Stage newStage = new Stage();
             newStage.setScene(new Scene(root));
-            newStage.setTitle("Panel de Usuario");
+            newStage.setTitle("Menu de Administrador");
             ((Stage) txtUsername.getScene().getWindow()).close();
             newStage.show();
         } catch (IOException e) {
-            Alertas.mostrarError("Error al cargar el fxml de administrador" + e.getMessage());
+            Alertas.mostrarError("Error al cargar el fxml de administrador: " + e.getMessage());
+            e.printStackTrace(); // Mostrar la traza completa para diagnóstico
         }
     }
-
 
 
     @FXML
@@ -107,8 +112,6 @@ void handleLogin(ActionEvent event) {
             if (loader.getLocation() == null) {
                 throw new IOException("No se pudo encontrar el archivo FXML: CrearCuenta.fxml en la ruta esperada");
             }
-
-            Alertas.mostrarAdvertencia("Archivo FXML encontrado en: " + loader.getLocation());
 
             AnchorPane pane = loader.load();
             Stage stage = new Stage();
@@ -144,8 +147,6 @@ void handleLogin(ActionEvent event) {
             if (loader.getLocation() == null) {
                 throw new IOException("No se pudo encontrar el archivo FXML: RecuperarCuenta1.fxml en la ruta esperada");
             }
-
-            Alertas.mostrarExito("Archivo FXML encontrado en: " +loader.getLocation());
 
             AnchorPane pane = loader.load();
             Stage stage = new Stage();

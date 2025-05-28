@@ -10,21 +10,21 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
     @Override
     public boolean AgregarUsuario(UsuarioVO usuario) {
-        String sql = "insert into Usuario (nombre, correo, contraseña, confirmarContraseña, preguntaSeguridad, respuestaSeguridad," +
-                "direccion, esAdmin, activo) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into Usuario (nombre, correo, contraseña, preguntaSeguridad, respuestaSeguridad," +
+                "direccion, esAdmin, activo) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
 
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getCorreo());
-            ps.setString(3, usuario.getContraseña());
-            ps.setString(4, usuario.getConfirmarContraseña());
-            ps.setString(5, usuario.getPreguntaSeguridad());
-            ps.setString(6, usuario.getRespuestaSeguridad());
-            ps.setString(7, usuario.getDireccion());
-            ps.setBoolean(8, usuario.isAdmin());
-            ps.setBoolean(9, usuario.isActivo());
+                ps.setString(1, usuario.getNombre());
+                ps.setString(2, usuario.getCorreo());
+                ps.setString(3, usuario.getContraseña());
+                ps.setString(4, usuario.getPreguntaSeguridad());
+                ps.setString(5, usuario.getRespuestaSeguridad());
+                ps.setString(6, usuario.getDireccion());
+                ps.setBoolean(7, usuario.isAdmin());
+                ps.setBoolean(8, usuario.isActivo());
+
 
             // Si hay imagen, añadirla después de la inserción
             int resultado = ps.executeUpdate();
@@ -68,15 +68,33 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
     @Override
     public boolean actualizarUsuario(UsuarioVO usuario) {
-        String sql = "UPDATE Usuario SET nombre = ?, direccion = ?, activo = ? WHERE correo = ?";
+        // SQL base para actualizar datos básicos
+        StringBuilder sql = new StringBuilder("UPDATE Usuario SET nombre = ?, direccion = ?, activo = ?");
+        
+        // Si la contraseña no es nula, incluirla en la actualización
+        boolean actualizarContraseña = usuario.getContraseña() != null && !usuario.getContraseña().isEmpty();
+        if (actualizarContraseña) {
+            sql.append(", contraseña = ?, confirmarContraseña = ?");
+        }
+        
+        sql.append(" WHERE correo = ?");
         
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getDireccion());
             ps.setBoolean(3, usuario.isActivo());
-            ps.setString(4, usuario.getCorreo());
+            
+            int paramIndex = 4;
+            
+            // Si hay contraseña para actualizar, establecer los parámetros
+            if (actualizarContraseña) {
+                ps.setString(paramIndex++, usuario.getContraseña());
+                ps.setString(paramIndex++, usuario.getContraseña()); // Usar la misma contraseña como confirmación
+            }
+            
+            ps.setString(paramIndex, usuario.getCorreo());
             
             boolean resultado = ps.executeUpdate() > 0;
             
@@ -93,22 +111,6 @@ public class UsuarioDAOImp implements UsuarioDAO{
             return resultado;
         } catch (SQLException e) {
             Alertas.mostrarError("Error al actualizar usuario: " + e.getMessage());
-            return false;
-        }
-    }
-
-    @Override
-    public boolean eliminarUsuario(String correo) {
-        String sql = "DELETE FROM Usuario WHERE correo = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, correo);
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            Alertas.mostrarError("Error al eliminar usuario: " + e.getMessage());
             return false;
         }
     }
@@ -265,5 +267,51 @@ public UsuarioVO autenticarUsuario(String username, String password) {
             throw e;
         }
         return lista;
+    }
+
+    @Override
+    public boolean eliminarUsuario(int idUsuario) {
+        String sql = "DELETE FROM Usuario WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            Alertas.mostrarError("Error al eliminar usuario: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean desactivarUsuario(int idUsuario) {
+        String sql = "UPDATE Usuario SET activo = false WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            Alertas.mostrarError("Error al desactivar usuario: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean activarUsuario(int idUsuario) {
+        String sql = "UPDATE Usuario SET activo = true WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            Alertas.mostrarError("Error al activar usuario: " + e.getMessage());
+            return false;
+        }
     }
 }

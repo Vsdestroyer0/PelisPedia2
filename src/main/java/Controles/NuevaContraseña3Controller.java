@@ -51,13 +51,13 @@ public class NuevaContraseña3Controller {
 
         if (usuario != null) {
             usuario.setContraseña(nuevaContraseña);
-            usuario.setConfirmarContraseña(confirmacion);
 
+            
             if (usuarioDAO.actualizarUsuario(usuario)) {
                 Alertas.mostrarAdvertencia("Contraseña actualizada");
                 cerrarVentana();
             } else {
-                Alertas.mostrarError("Las contraseñas no coinciden");
+                Alertas.mostrarError("Error al actualizar la contraseña. Verifique la conexión a la base de datos.");
             }
         }
     }

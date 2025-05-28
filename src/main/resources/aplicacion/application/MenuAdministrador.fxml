@@ -38,7 +38,7 @@
         </Button>
         <ImageView fitHeight="261.0" fitWidth="273.0" layoutX="540.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../Imgs/User.png" />
+                <Image url="@../Imgs/Admin.png" />
             </image>
         </ImageView>
         <Label layoutX="131.0" layoutY="33.0" prefHeight="17.0" prefWidth="287.0" text="Pelispedia" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
@@ -67,6 +67,11 @@
          </font>
       </Label>
       <Button fx:id="ButtonUsers" layoutX="95.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleUsuarios" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Usuarios" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="ButtonTickets" layoutX="95.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleTickets" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Ver Tickets" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>

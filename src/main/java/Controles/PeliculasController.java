@@ -1,13 +1,12 @@
 package Controles;
 
-//import aplicacion.DAO.PeliculaDAO;
-//import aplicacion.DAO.PeliculaDAOImp;
+import aplicacion.DAO.PeliculaDAO;
+import aplicacion.DAO.PeliculaDAOImp;
 import aplicacion.VO.PeliculaVO;
 import aplicacion.Vistas.Alertas;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -16,7 +15,7 @@ import javafx.scene.image.ImageView;
 import java.io.ByteArrayInputStream;
 
 public class PeliculasController {
-/*
+
     @FXML
     private TableView<PeliculaVO> tablePeliculas;
 
@@ -25,7 +24,6 @@ public class PeliculasController {
 
     @FXML
     private TableColumn<PeliculaVO, String> colDescripcionPlanta;
-
 
     @FXML
     private TableColumn<PeliculaVO, String> colPropiedades;
@@ -110,11 +108,23 @@ public class PeliculasController {
 
     @FXML
     private void handleRentarPelicula() {
+        // Implementar la lógica para rentar películas
+        try {
+            Alertas.mostrarAdvertencia("Funcionalidad de renta de películas está en desarrollo.");
+            // Aquí iría la lógica para rentar películas cuando esté implementada
+        } catch (Exception e) {
+            Alertas.mostrarError("Error al rentar película: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleDevolverPelicula() {
         // Lógica para devolución similar a renta
+        try {
+            Alertas.mostrarAdvertencia("Funcionalidad de devolución de películas está en desarrollo.");
+            // Aquí iría la lógica para devolver películas cuando esté implementada
+        } catch (Exception e) {
+            Alertas.mostrarError("Error al devolver película: " + e.getMessage());
+        }
     }
-*/
 }
