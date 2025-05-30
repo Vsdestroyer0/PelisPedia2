@@ -15,6 +15,15 @@ CREATE TABLE Usuario (
     UNIQUE(correo)
 );
 
+CREATE TABLE IF NOT EXISTS Favorito (
+    idUsuario INT NOT NULL,
+    idPelicula INT NOT NULL,
+    fechaAgregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idUsuario, idPelicula),
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (idPelicula) REFERENCES peliculasGeneral(id_pelicula) ON DELETE CASCADE
+);
+
 CREATE TABLE peliculasGeneral (
     id_pelicula INT AUTO_INCREMENT, -- Identificador único para cada película
     imagen LONGBLOB,                -- Imagen de la película
@@ -84,14 +93,4 @@ CREATE TABLE ticket_detalle (
     FOREIGN KEY (id_pelicula) REFERENCES peliculasGeneral(id_pelicula)
 );
 
-USE PelisPedia;
 
--- Crear la tabla de Favoritos si no existe
-CREATE TABLE IF NOT EXISTS Favorito (
-    idUsuario INT NOT NULL,
-    idPelicula INT NOT NULL,
-    fechaAgregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (idUsuario, idPelicula),
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(id) ON DELETE CASCADE,
-    FOREIGN KEY (idPelicula) REFERENCES peliculasGeneral(id_pelicula) ON DELETE CASCADE
-);
