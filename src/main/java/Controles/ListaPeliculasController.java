@@ -43,6 +43,7 @@ import java.util.ResourceBundle;
 
 public class ListaPeliculasController implements Initializable {
 
+    public Button btnVolver;
     // Componentes de la interfaz
     @FXML private TextField txtTitulo;
     @FXML private ComboBox<String> cmbClasificacion;
@@ -592,6 +593,22 @@ public class ListaPeliculasController implements Initializable {
             if (btnAgregarAlCarrito != null) btnAgregarAlCarrito.setVisible(true);
             if (btnAgregarAFavoritos != null) btnAgregarAFavoritos.setVisible(true);
             if (btnVerCarrito != null) btnVerCarrito.setVisible(true);
+        }
+    }
+
+    @FXML
+    private void handleVolverMenu() {
+        try {
+            // Cambiamos la ruta para que apunte al archivo correcto
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("MenuUsuario.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) btnVolver.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menú Principal");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alertas.mostrarError("No se pudo cargar el menú principal: " + e.getMessage());
         }
     }
 }
