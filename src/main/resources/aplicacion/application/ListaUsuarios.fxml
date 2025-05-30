@@ -233,24 +233,8 @@
       </Label>
       
       <!-- Botones de acción en horizontal -->
-      <HBox alignment="CENTER" layoutX="560.0" layoutY="400.0" spacing="30.0">
+      <HBox alignment="CENTER" layoutX="700.0" layoutY="400.0" spacing="30.0">
          <children>
-            <Button fx:id="btnAgregar" minWidth="110.0" mnemonicParsing="false" onAction="#handleAgregarUsuario" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Agregar">
-               <font>
-                  <Font size="16.0" />
-               </font>
-               <padding>
-                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-               </padding>
-               <effect>
-                  <DropShadow height="5.0" radius="2.0" width="5.0">
-                     <color>
-                        <Color opacity="0.25" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Button>
-            
             <Button fx:id="btnModificar" minWidth="110.0" mnemonicParsing="false" onAction="#handleModificarUsuario" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Modificar">
                <font>
                   <Font size="16.0" />
@@ -268,6 +252,43 @@
             </Button>
             
             <Button fx:id="btnEliminar" minWidth="110.0" mnemonicParsing="false" onAction="#handleEliminarUsuario" style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Eliminar">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0">
+                     <color>
+                        <Color opacity="0.25" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Button>
+         </children>
+      </HBox>
+
+      <!-- Botones de activar y desactivar -->
+      <HBox alignment="CENTER" layoutX="420.0" layoutY="400.0" spacing="10.0">
+         <children>
+            <Button fx:id="btnActivar" minWidth="110.0" mnemonicParsing="false" onAction="#handleActivarUsuario" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Activar">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0">
+                     <color>
+                        <Color opacity="0.25" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Button>
+            
+            <Button fx:id="btnDesactivar" minWidth="110.0" mnemonicParsing="false" onAction="#handleDesactivarUsuario" style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="Desactivar">
                <font>
                   <Font size="16.0" />
                </font>
@@ -303,20 +324,10 @@
             </DropShadow>
          </effect>
       </TableView>
-      <Button fx:id="btnAgregar1" layoutX="420.0" layoutY="400.0" minWidth="110.0" mnemonicParsing="false" onAction="#handleActivarDesactivarUsuario" style="-fx-background-color: gray; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;" text="(Des)Activar">
-         <font>
-            <Font size="16.0" />
-         </font>
-         <padding>
-            <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-         </padding>
-         <effect>
-            <DropShadow height="5.0" radius="2.0" width="5.0">
-               <color>
-                  <Color opacity="0.25" />
-               </color>
-            </DropShadow>
-         </effect>
-      </Button>
    </children>
+   <Button fx:id="btnVolverMenu" onAction="#handleVolverMenu" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Volver al Menú" textFill="WHITE">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Button>
 </AnchorPane>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.FavoritosController">
+   <children>
+      <!-- Fondo con gradiente -->
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="600.0" stroke="BLACK" strokeType="INSIDE" width="900.0">
+         <fill>
+            <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="1.0" startY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.12941177189350128" green="0.10196078568696976" blue="0.3607843220233917" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.1882352977991104" green="0.13725490868091583" blue="0.658823549747467" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+
+      <!-- Cabecera con título y botón de volver -->
+      <HBox alignment="CENTER_LEFT" layoutX="0.0" layoutY="0.0" prefHeight="70.0" prefWidth="900.0" spacing="10.0">
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+         <children>
+            <!-- Logo de la aplicación -->
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Imgs/Claqueta.jpg" />
+               </image>
+            </ImageView>
+            
+            <!-- Título de la aplicación -->
+            <Label text="Mis Películas Favoritas" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="28.0" />
+               </font>
+            </Label>
+            
+            <!-- Espaciador -->
+            <HBox HBox.hgrow="ALWAYS" />
+            
+            <!-- Botón de volver al menú -->
+            <Button fx:id="btnVolverMenu" onAction="#handleVolverMenu" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Volver al Menú" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+            </Button>
+         </children>
+      </HBox>
+
+      <!-- Tabla de películas favoritas -->
+      <TableView fx:id="tablaFavoritos" layoutX="30.0" layoutY="100.0" prefHeight="400.0" prefWidth="840.0" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;">
+         <columns>
+            <TableColumn fx:id="colImagen" prefWidth="100.0" text="Imagen" />
+            <TableColumn fx:id="colTitulo" prefWidth="200.0" text="Título" />
+            <TableColumn fx:id="colClasificacion" prefWidth="100.0" text="Clasificación" />
+            <TableColumn fx:id="colDescripcion" prefWidth="300.0" text="Descripción" />
+            <TableColumn fx:id="colPrecio" prefWidth="100.0" text="Precio" />
+         </columns>
+         <effect>
+            <DropShadow height="10.0" radius="4.5" width="10.0">
+               <color>
+                  <Color opacity="0.25" />
+               </color>
+            </DropShadow>
+         </effect>
+      </TableView>
+      
+      <!-- Botones de acción -->
+      <HBox alignment="CENTER" layoutX="30.0" layoutY="520.0" prefHeight="50.0" prefWidth="840.0" spacing="20.0">
+         <children>
+            <Button fx:id="btnEliminarFavorito" onAction="#handleEliminarFavorito" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #aa2b4a; -fx-background-radius: 20; -fx-cursor: hand;" text="Eliminar de Favoritos" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnRentarPelicula" onAction="#handleRentarPelicula" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #2f7e36; -fx-background-radius: 20; -fx-cursor: hand;" text="Rentar Película" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

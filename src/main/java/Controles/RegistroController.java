@@ -7,6 +7,7 @@ import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -44,7 +45,7 @@ public class RegistroController {
 
     // Instancia del DAO para manipular usuarios
     private UsuarioDAO usuarioDAO;
-
+    
     @FXML
     public void initialize() {
         usuarioDAO = new UsuarioDAOImp();
@@ -184,7 +185,7 @@ public class RegistroController {
             // Registrar en base de datos
             if (usuarioDAO.AgregarUsuario(nuevoUsuario)) {
                 Alertas.mostrarAdvertencia("Exito, el usuario se registró correctamente");
-                // Opcional: Limpiar campos después del registro
+                // Limpiar campos después del registro
                 limpiarCampos();
                 openLoggin();
             } else {
@@ -196,58 +197,47 @@ public class RegistroController {
         }
     }
 
-    // Método opcional para limpiar campos después del registro
+    // Método para limpiar campos después del registro
     private void limpiarCampos() {
         txtUsername.clear();
         txtEmail.clear();
         txtPassword.clear();
-        txtVisiblePassword.clear();
         txtConfirmPassword.clear();
+        txtVisiblePassword.clear();
         txtVisibleConfirmPassword.clear();
         txtSecurityQuestion.clear();
         txtSecurityAnswer.clear();
         txtAddress.clear();
         
-        // Limpiar imagen si hay vista previa
+        // Restablecer campos de visibilidad de contraseña
+        passwordVisible = false;
+        confirmPasswordVisible = false;
+        txtPassword.setVisible(true);
+        txtConfirmPassword.setVisible(true);
+        txtVisiblePassword.setVisible(false);
+        txtVisibleConfirmPassword.setVisible(false);
+        
+        // Limpiar imagen
+        imagenBytes = null;
         if (imgPreview != null) {
             imgPreview.setImage(null);
         }
-        imagenBytes = null;
     }
-
-    @FXML
-    private void openLoggin(){
-        try{
-            // Usar la ruta absoluta desde la raíz del classpath
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("aplicacion/application/hello-view.fxml"));
-
-            if (loader.getLocation() == null) {
-                // Si no funciona, intentar con una ruta relativa al paquete de HelloApplication
-                loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            }
-
-            if (loader.getLocation() == null) {
-                // Si aún no funciona, intentar con una ruta absoluta desde la raíz
-                loader = new FXMLLoader(getClass().getClassLoader().getResource("/aplicacion/application/hello-view.fxml"));
-            }
-
-            if (loader.getLocation() == null) {
-                throw new IOException("No se pudo encontrar el archivo FXML: hello-view.fxml en la ruta esperada");
-            }
-
-            AnchorPane pane = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Login");
-            stage.setScene(new Scene(pane));
-
-            // Cerrar la ventana actual
-            Stage currentStage = (Stage) txtUsername.getScene().getWindow();
-            currentStage.close();
-
+    
+    // Método para abrir la pantalla de login
+    private void openLoggin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            AnchorPane root = loader.load();
+            
+            Stage stage = (Stage) txtUsername.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Login - PelisPedia");
             stage.show();
-        } catch (Exception e){
-            Alertas.mostrarError("Error al cargar la ventana de registro" + e.getMessage());
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al abrir la pantalla de login: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
 }

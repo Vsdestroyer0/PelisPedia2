@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.ListaTicketsController">
+   <children>
+      <!-- Fondo del panel -->
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="620.0" stroke="BLACK" strokeType="INSIDE" width="1200.0">
+         <fill>
+            <LinearGradient endX="0.20853080568720378" endY="0.2559241706161137" startX="0.4928909952606635" startY="0.3696682464454977">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.062745101749897" green="0.062745101749897" blue="0.14509804546833038" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.36933478713035583" green="0.3472222089767456" blue="0.7894737124443054" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      
+      <!-- Barra superior -->
+      <HBox alignment="CENTER_LEFT" layoutY="0.0" prefHeight="70.0" prefWidth="1200.0" spacing="20.0" style="-fx-background-color: rgba(0,0,0,0.3);">
+         <children>
+            <Label text="Gestión de Tickets" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#handleVolverMenu" style="-fx-background-color: red; -fx-background-radius: 20;" text="Volver al Menú" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      
+      <!-- Sección de búsqueda -->
+      <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="80.0" prefHeight="50.0" prefWidth="1160.0" spacing="15.0">
+         <children>
+            <Label text="Buscar por ID o Usuario:" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtBuscar" prefHeight="30.0" prefWidth="300.0" promptText="Ingrese ID o nombre de usuario">
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0">
+                     <color>
+                        <Color opacity="0.2" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#handleBuscar" style="-fx-background-color: #27254d; -fx-background-radius: 5;" text="Buscar" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#handleMostrarTodos" style="-fx-background-color: #27254d; -fx-background-radius: 5;" text="Mostrar Todos" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      
+      <!-- Tabla de tickets -->
+      <TableView fx:id="tablaTickets" layoutX="20.0" layoutY="140.0" prefHeight="300.0" prefWidth="1160.0" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;">
+         <columns>
+            <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
+            <TableColumn fx:id="colFecha" prefWidth="150.0" text="Fecha" />
+            <TableColumn fx:id="colUsuario" prefWidth="150.0" text="Usuario" />
+            <TableColumn fx:id="colTotal" prefWidth="100.0" text="Total" />
+            <TableColumn fx:id="colEstado" prefWidth="100.0" text="Estado" />
+            <TableColumn fx:id="colPeliculas" prefWidth="584.0" text="Películas" />
+         </columns>
+      </TableView>
+      
+      <!-- Detalles del ticket -->
+      <VBox layoutX="20.0" layoutY="450.0" prefHeight="160.0" prefWidth="1160.0" spacing="10.0">
+         <children>
+            <Label text="Detalles del Ticket" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TableView fx:id="tablaDetalles" prefHeight="120.0" prefWidth="1160.0" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;">
+               <columns>
+                  <TableColumn fx:id="colDetallePelicula" prefWidth="300.0" text="Película" />
+                  <TableColumn fx:id="colDetallePrecio" prefWidth="150.0" text="Precio" />
+                  <TableColumn fx:id="colDetalleCantidad" prefWidth="150.0" text="Cantidad" />
+                  <TableColumn fx:id="colDetalleSubtotal" prefWidth="150.0" text="Subtotal" />
+                  <TableColumn fx:id="colDetalleFechaRenta" prefWidth="200.0" text="Fecha Renta" />
+                  <TableColumn fx:id="colDetalleFechaDevolucion" prefWidth="200.0" text="Fecha Devolución" />
+               </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -1,61 +1,254 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="602.0" prefWidth="1001.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.PeliculasController">
-
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.PanelUsuarioController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="609.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="1001.0" />
+      <!-- Fondo con gradiente -->
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="695.0" stroke="BLACK" strokeType="INSIDE" width="900.0">
+         <fill>
+            <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="1.0" startY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.12941177189350128" green="0.10196078568696976" blue="0.3607843220233917" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.1882352977991104" green="0.13725490868091583" blue="0.658823549747467" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
 
-      <!-- Buscador -->
-      <Label layoutX="231.0" layoutY="54.0" prefHeight="30.0" prefWidth="87.0" text="Buscar:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtBusqueda" layoutX="378.0" layoutY="56.0" prefHeight="25.0" prefWidth="369.0" style="-fx-border-radius: 20;" />
+      <!-- Cabecera con título y botón de volver -->
+      <HBox alignment="CENTER_LEFT" layoutX="0.0" layoutY="0.0" prefHeight="70.0" prefWidth="900.0" spacing="10.0">
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+         <children>
+            <!-- Logo de la aplicación -->
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Imgs/Claqueta.jpg" />
+               </image>
+            </ImageView>
+            
+            <!-- Título de la aplicación -->
+            <Label text="Mi Perfil" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="28.0" />
+               </font>
+            </Label>
+            
+            <!-- Espaciador -->
+            <HBox HBox.hgrow="ALWAYS" />
+            
+            <!-- Botón de volver al menú -->
+            <Button fx:id="btnVolverMenu" onAction="#handleVolverMenu" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Volver al Menú" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+            </Button>
+         </children>
+      </HBox>
 
-      <!-- Tabla de Películas -->
-      <TableView fx:id="tablaPeliculas" layoutX="203.0" layoutY="110.0" prefHeight="455.0" prefWidth="675.0">
-         <columns>
-            <TableColumn fx:id="colImagen" prefWidth="150.0" text="Poster">
-               <cellValueFactory>
-                  <PropertyValueFactory property="imagen" />
-               </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="colTitulo" prefWidth="200.0" text="Título">
-               <cellValueFactory>
-                  <PropertyValueFactory property="titulo" />
-               </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="colClasificacion" prefWidth="150.0" text="Clasificación">
-               <cellValueFactory>
-                  <PropertyValueFactory property="clasificacion" />
-               </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="colStock" prefWidth="100.0" text="Stock">
-               <cellValueFactory>
-                  <PropertyValueFactory property="stock" />
-               </cellValueFactory>
-            </TableColumn>
-         </columns>
-      </TableView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="609.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="89.0" />
-
-      <!-- Botones de Navegación -->
-      <Button layoutX="-1.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleRentarPelicula" prefHeight="150.0" prefWidth="95.0" text="(Pelis Rentadas)" />
-
-      <Button layoutX="-1.0" layoutY="447.0" mnemonicParsing="false" onAction="#handleDevolverPelicula" prefHeight="161.0" prefWidth="95.0" text="Log out" />
-      <Button layoutX="-1.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleRentarPelicula" prefHeight="150.0" prefWidth="95.0" text="(Pelis general)" />
-      <Button layoutX="-1.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleRentarPelicula" prefHeight="150.0" prefWidth="95.0" text="(Usuario) Datos, baja" />
-
+      <!-- Contenido del Perfil - 2 columnas -->
+      <HBox layoutX="30.0" layoutY="90.0" prefHeight="480.0" prefWidth="840.0" spacing="30.0">
+         <children>
+            <!-- Columna Izquierda - Datos del Usuario -->
+            <VBox prefHeight="480.0" prefWidth="500.0" spacing="20.0">
+               <children>
+                  <Label text="Información Personal" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  
+                  <!-- Nombre -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Nombre:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtNombre" prefHeight="40.0" style="-fx-background-radius: 10; -fx-background-color: rgba(255,255,255,0.9);">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Correo Electrónico -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Correo Electrónico:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtCorreo" editable="false" prefHeight="40.0" style="-fx-background-radius: 10; -fx-background-color: rgba(200,200,200,0.9);">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Dirección -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Dirección:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtDireccion" prefHeight="40.0" style="-fx-background-radius: 10; -fx-background-color: rgba(255,255,255,0.9);">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Contraseña Actual -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Contraseña Actual:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="txtPasswordActual" prefHeight="40.0" promptText="Ingrese para cambiar contraseña" style="-fx-background-radius: 10; -fx-background-color: rgba(255,255,255,0.9);">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </PasswordField>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Nueva Contraseña -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Nueva Contraseña:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="txtPasswordNueva" prefHeight="40.0" promptText="Deje en blanco para mantener la actual" style="-fx-background-radius: 10; -fx-background-color: rgba(255,255,255,0.9);">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </PasswordField>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Confirmar Nueva Contraseña -->
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Confirmar Nueva Contraseña:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="txtPasswordConfirm" prefHeight="40.0" promptText="Confirme su nueva contraseña" style="-fx-background-radius: 10; -fx-background-color: rgba(255,255,255,0.9);">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </PasswordField>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            
+            <!-- Columna Derecha - Imagen y Botones -->
+            <VBox alignment="CENTER" prefHeight="605.0" prefWidth="311.0" spacing="20.0">
+               <children>
+                  <Label text="Imagen de Perfil" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  
+                  <!-- Vista previa de la imagen -->
+                  <ImageView fx:id="imgPreview" fitHeight="180.0" fitWidth="180.0" layoutX="65.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
+                     <effect>
+                        <DropShadow height="10.0" radius="4.5" width="10.0">
+                           <color>
+                              <Color opacity="0.25" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </ImageView>
+                  
+                  <!-- Botón para seleccionar imagen -->
+                  <Button fx:id="btnSeleccionarImagen" onAction="#handleSeleccionarImagen" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #27254d; -fx-background-radius: 20; -fx-cursor: hand;" text="Seleccionar Imagen" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <!-- Botón Guardar Cambios -->
+                        <Button fx:id="btnGuardar" onAction="#handleGuardarCambios" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #2f7e36; -fx-background-radius: 20; -fx-cursor: hand;" text="Guardar Cambios" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                        
+                        <!-- Botón Cancelar -->
+                        <Button fx:id="btnCancelar" onAction="#handleCancelar" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #aa2b4a; -fx-background-radius: 20; -fx-cursor: hand;" text="Cancelar" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

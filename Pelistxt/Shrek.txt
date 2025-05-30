@@ -1,0 +1,5 @@
+Película: Shrek
+Fecha de renta: 29/05/2025 22:15:53
+Usuario: Yael (Yael@gmail.com)
+ID de Ticket: 5
+Precio: $200.00

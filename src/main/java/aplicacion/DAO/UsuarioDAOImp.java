@@ -74,7 +74,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
         // Si la contraseña no es nula, incluirla en la actualización
         boolean actualizarContraseña = usuario.getContraseña() != null && !usuario.getContraseña().isEmpty();
         if (actualizarContraseña) {
-            sql.append(", contraseña = ?, confirmarContraseña = ?");
+            sql.append(", contraseña = ?");
         }
         
         sql.append(" WHERE correo = ?");
@@ -91,7 +91,6 @@ public class UsuarioDAOImp implements UsuarioDAO{
             // Si hay contraseña para actualizar, establecer los parámetros
             if (actualizarContraseña) {
                 ps.setString(paramIndex++, usuario.getContraseña());
-                ps.setString(paramIndex++, usuario.getContraseña()); // Usar la misma contraseña como confirmación
             }
             
             ps.setString(paramIndex, usuario.getCorreo());
@@ -117,7 +116,7 @@ public class UsuarioDAOImp implements UsuarioDAO{
 
 @Override
 public UsuarioVO autenticarUsuario(String username, String password) {
-    String sql = "SELECT nombre, correo, contraseña, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin, activo " +
+    String sql = "SELECT id, nombre, correo, contraseña, preguntaSeguridad, respuestaSeguridad, direccion, esAdmin, activo " +
                 "FROM Usuario WHERE correo = ?";
     
     try (Connection conn = DatabaseConnection.getConnection();
@@ -138,15 +137,17 @@ public UsuarioVO autenticarUsuario(String username, String password) {
             // Aquí deberías implementar la verificación de contraseña hasheada
             if (password.equals(storedPassword)) { // Temporal - Reemplazar con verificación de hash
                 UsuarioVO usuario = new UsuarioVO(
+                    rs.getInt("id"),
                     rs.getString("nombre"),
                     rs.getString("correo"),
                     null, // No devolver la contraseña
                     rs.getString("preguntaSeguridad"),
                     rs.getString("respuestaSeguridad"),
                     rs.getString("direccion"),
-                    rs.getBoolean("esAdmin")
+                    rs.getBoolean("esAdmin"),
+                    null,  // Imagen se carga por separado
+                    activo
                 );
-                usuario.setActivo(activo);
                 
                 // Obtener la imagen en una consulta separada para mejorar rendimiento
                 String imgSql = "SELECT Imagen FROM Usuario WHERE correo = ?";
@@ -221,6 +222,7 @@ public UsuarioVO autenticarUsuario(String username, String password) {
         return usuario;
     }
 
+    
     public List<UsuarioVO> listarUsuarios() throws SQLException {
         String sql = "SELECT * FROM Usuario WHERE esAdmin = false";
         List<UsuarioVO> lista = new ArrayList<>();
@@ -229,6 +231,7 @@ public UsuarioVO autenticarUsuario(String username, String password) {
              ResultSet rs = s.executeQuery(sql)) {
 
             while (rs.next()) {
+                // Crear usuario con constructor básico
                 UsuarioVO u = new UsuarioVO(
                         rs.getString("nombre"),
                         rs.getString("correo"),
@@ -239,26 +242,32 @@ public UsuarioVO autenticarUsuario(String username, String password) {
                         rs.getBoolean("esAdmin")
                 );
                 
+                // Establecer el ID del usuario - esta línea faltaba
+                u.setId(rs.getInt("id"));
+                
                 // Obtener estado activo
                 try {
-                    u.setActivo(rs.getBoolean("activo"));
+                    u.setActivo(rs.getBoolean("Activo"));
                 } catch (SQLException e) {
-                    // Si la columna no existe, establecer como true por defecto
+                    // Si no existe la columna, establecer valor por defecto
                     u.setActivo(true);
                 }
                 
-                // Obtener imagen
+                // Intentar cargar la imagen
                 try {
-                    byte[] imagenBytes = rs.getBytes("Imagen");
-                    if (imagenBytes != null) {
-                        u.setImagen(imagenBytes);
+                    byte[] imagen = rs.getBytes("Imagen");
+                    if (imagen != null) {
+                        u.setImagen(imagen);
                     }
                 } catch (SQLException e) {
-                    // Si la columna no existe, la imagen queda como null
+                    // Si no existe la columna Imagen, continuar sin imagen
                     if (lista.isEmpty()) {
                         System.out.println("Aviso: La columna 'Imagen' no existe en la tabla Usuario. Se usarán imágenes por defecto.");
                     }
                 }
+                
+                // Imprimir información para depuración
+                System.out.println("Usuario cargado: ID=" + u.getId() + ", Nombre=" + u.getNombre() + ", Activo=" + u.isActivo());
                 
                 lista.add(u);
             }
@@ -268,7 +277,7 @@ public UsuarioVO autenticarUsuario(String username, String password) {
         }
         return lista;
     }
-
+    
     @Override
     public boolean eliminarUsuario(int idUsuario) {
         String sql = "DELETE FROM Usuario WHERE id = ?";
@@ -277,29 +286,54 @@ public UsuarioVO autenticarUsuario(String username, String password) {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idUsuario);
-            return ps.executeUpdate() > 0;
+            int filasAfectadas = ps.executeUpdate();
+            
+            // Registrar el resultado para depuración
+            System.out.println("Eliminando usuario con ID: " + idUsuario + " - Filas afectadas: " + filasAfectadas);
+            
+            return filasAfectadas > 0;
 
         } catch (SQLException e) {
-            Alertas.mostrarError("Error al eliminar usuario: " + e.getMessage());
+            // Registrar el error completo para depuración
+            System.err.println("Error detallado al eliminar usuario ID " + idUsuario + ": " + e.getMessage());
+            e.printStackTrace();
+            
+            // Si hay restricciones de clave externa, mostrar un mensaje más específico
+            if (e.getMessage().contains("foreign key") || e.getMessage().contains("constraint")) {
+                Alertas.mostrarError("No se puede eliminar el usuario porque tiene registros relacionados (rentas, tickets, etc.).");
+            } else {
+                Alertas.mostrarError("Error al eliminar usuario: " + e.getMessage());
+            }
             return false;
         }
     }
+    
 
-    @Override
-    public boolean desactivarUsuario(int idUsuario) {
-        String sql = "UPDATE Usuario SET activo = false WHERE id = ?";
+@Override
+public boolean desactivarUsuario(int idUsuario) {
+    System.out.println("Intentando desactivar usuario con ID: " + idUsuario);
+    String sql = "UPDATE Usuario SET Activo = false WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idUsuario);
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            Alertas.mostrarError("Error al desactivar usuario: " + e.getMessage());
-            return false;
+        ps.setInt(1, idUsuario);
+        int filasAfectadas = ps.executeUpdate();
+        System.out.println("Filas afectadas: " + filasAfectadas);
+        
+        if (filasAfectadas == 0) {
+            System.out.println("No se encontró ningún usuario con ID: " + idUsuario);
         }
+        
+        return filasAfectadas > 0;
+
+    } catch (SQLException e) {
+        System.out.println("Error SQL: " + e.getMessage());
+        Alertas.mostrarError("Error al desactivar usuario: " + e.getMessage());
+        e.printStackTrace();
+        return false;
     }
+}
     public boolean activarUsuario(int idUsuario) {
         String sql = "UPDATE Usuario SET activo = true WHERE id = ?";
 

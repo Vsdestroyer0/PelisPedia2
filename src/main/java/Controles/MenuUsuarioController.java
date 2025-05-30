@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import aplicacion.Vistas.Alertas;
 import aplicacion.application.HelloApplication;
+import aplicacion.application.SesionUsuario;
+import Controles.MisRentasController;
 
 public class MenuUsuarioController {
 
@@ -22,6 +24,31 @@ public class MenuUsuarioController {
     private Button ButtonFav;
     @FXML
     private Button ButtonMiPerfil;
+    @FXML
+    private Button ButtonSalir;
+
+
+    @FXML private Button btnVolverMenu;
+    @FXML
+    private void handleVolverMenu() {
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) btnVolverMenu.getScene().getWindow();
+            stage.close();
+            
+            // Cargar el menú de usuario
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            Parent root = loader.load();
+            
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Bienvenido a PelisPedia");
+            newStage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al volver al menú: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
@@ -30,31 +57,114 @@ public class MenuUsuarioController {
 
     @FXML
     private void handleCatalogo() {
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Catálogo estará disponible pronto.");
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("ListaPeliculas.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Catálogo de Películas - PelisPedia");
+            
+            // Cerrar la ventana actual
+            Stage currentStage = (Stage) ButtonCatalogo.getScene().getWindow();
+            currentStage.close();
+            
+            stage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al abrir el catálogo de películas: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleMisRentas() {
-        // Implementar lógica para ver las rentas
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Mis Rentas estará disponible pronto.");
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("MisRentas.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Mis Películas Rentadas - PelisPedia");
+            
+            // Cerrar la ventana actual
+            Stage currentStage = (Stage) ButtonMisRentas.getScene().getWindow();
+            currentStage.close();
+            
+            // Verificar si el controlador implementa el método detenerTemporizadores
+            Object controller = loader.getController();
+            if (controller instanceof MisRentasController) {
+                // Agregar un listener para detener los temporizadores al cerrar la ventana
+                stage.setOnCloseRequest(event -> {
+                    ((MisRentasController) controller).detenerTemporizadores();
+                });
+            }
+            
+            stage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al abrir mis películas rentadas: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleFavoritos() {
-        // Implementar lógica para ver favoritos
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Favoritos estará disponible pronto.");
+        try {
+            // Verificar si el archivo FXML existe
+            URL resource = HelloApplication.class.getResource("Favoritos.fxml");
+            if (resource == null) {
+                // Si no existe, mostrar mensaje de funcionalidad en desarrollo
+                Alertas.mostrarAdvertencia("La sección de Favoritos estará disponible pronto. Estamos trabajando en implementarla.");
+                return;
+            }
+            
+            FXMLLoader loader = new FXMLLoader(resource);
+            Parent root = loader.load();
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Mis Favoritos - PelisPedia");
+            
+            // Cerrar la ventana actual
+            Stage currentStage = (Stage) ButtonFav.getScene().getWindow();
+            currentStage.close();
+            
+            stage.show();
+        } catch (IOException e) {
+            // Si hay un error al cargar, implementar una versión simple de la vista
+            Alertas.mostrarAdvertencia("La sección de Favoritos estará disponible pronto. Estamos trabajando en implementarla.");
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleMiPerfil() {
-        Alertas.mostrarAdvertencia("Funcionalidad en desarrollo, la sección de Mi Perfil estará disponible pronto.");
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("PanelUsuario.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Mi Perfil - PelisPedia");
+            
+            // Cerrar la ventana actual
+            Stage currentStage = (Stage) ButtonMiPerfil.getScene().getWindow();
+            currentStage.close();
+            
+            stage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al abrir mi perfil: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void handleCerrarSesion() {
+    private void handleSalir() {
         try {
+            // Cerrar la sesión de usuario
+            SesionUsuario.getInstancia().cerrarSesion();
+            
             // Cerrar la ventana actual
-            Stage stage = (Stage) ButtonMiPerfil.getScene().getWindow();
+            Stage stage = (Stage) ButtonSalir.getScene().getWindow();
             stage.close();
             
             // Cargar la pantalla de inicio de sesión
@@ -63,10 +173,11 @@ public class MenuUsuarioController {
             
             Stage newStage = new Stage();
             newStage.setScene(new Scene(root));
-            newStage.setTitle("Inicio de Sesión");
+            newStage.setTitle("Inicio de Sesión - PelisPedia");
             newStage.show();
         } catch (IOException e) {
             Alertas.mostrarError("Error al cerrar sesión: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -44,7 +44,6 @@ public class ListaUsuariosController implements Initializable {
     @FXML private Button btnSeleccionarImagen;
     @FXML private Button btnModificar;
     @FXML private Button btnEliminar;
-    @FXML private Button btnAgregar;
     @FXML private Button btnCerrarSesion;
     @FXML private AnchorPane rootPane;
     @FXML private CheckBox chkActivo;
@@ -63,6 +62,28 @@ public class ListaUsuariosController implements Initializable {
     
     // Imagen por defecto para usuarios sin imagen
     private final Image defaultUserImage = new Image(getClass().getResourceAsStream("/aplicacion/Imgs/LogoInicio.png"));
+
+    @FXML private Button btnVolverMenu;
+    @FXML
+    private void handleVolverMenu() {
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) btnVolverMenu.getScene().getWindow();
+            stage.close();
+            
+            // Cargar el menú de usuario
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("MenuAdministrador.fxml"));
+            Parent root = loader.load();
+            
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Menú Administrador - PelisPedia");
+            newStage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al volver al menú: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -158,23 +179,6 @@ public class ListaUsuariosController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleAgregarUsuario(ActionEvent event) {
-        try {
-            // Cargar la vista de CrearCuenta.fxml
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("CrearCuenta.fxml"));
-            Parent root = loader.load();
-            
-            // Configurar la escena
-            Stage stage = (Stage) btnAgregar.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Crear Nuevo Usuario - PelisPedia");
-            stage.show();
-        } catch (IOException e) {
-            Alertas.mostrarError("Error al abrir la pantalla de creación de usuario: " + e.getMessage());
-        }
-    }
 
     @FXML
     private void handleSeleccionarImagen(ActionEvent e) {
@@ -283,50 +287,114 @@ public class ListaUsuariosController implements Initializable {
     }
 
     @FXML
-    private void handleActivarDesactivarUsuario(ActionEvent e) {
+    private void handleActivarUsuario(ActionEvent e) {
         UsuarioVO usuarioSeleccionado = tablaUsuarios.getSelectionModel().getSelectedItem();
         if (usuarioSeleccionado != null) {
             try {
-                // Cambiar el estado actual del usuario (activar/desactivar)
-                boolean nuevoEstado = !usuarioSeleccionado.isActivo();
+                // Guardar el índice seleccionado para restaurarlo después
+                int selectedIndex = tablaUsuarios.getSelectionModel().getSelectedIndex();
                 
                 // Confirmar la acción con el usuario
-                String accion = nuevoEstado ? "activar" : "desactivar";
                 Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmacion.setTitle("Confirmar cambio de estado");
-                confirmacion.setHeaderText("¿Está seguro de " + accion + " este usuario?");
-                confirmacion.setContentText("Esta acción " + accion + "á al usuario " + usuarioSeleccionado.getNombre() + 
+                confirmacion.setTitle("Confirmar activación");
+                confirmacion.setHeaderText("¿Está seguro de activar este usuario?");
+                confirmacion.setContentText("Esta acción activará al usuario " + usuarioSeleccionado.getNombre() + 
                                           " con correo " + usuarioSeleccionado.getCorreo());
                 
                 Optional<ButtonType> result = confirmacion.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // Actualizar el estado del usuario
-                    usuarioSeleccionado.setActivo(nuevoEstado);
+                    System.out.println("Intentando activar usuario: ID=" + usuarioSeleccionado.getId() + 
+                                      ", Nombre=" + usuarioSeleccionado.getNombre());
                     
-                    // Guardar el cambio en la base de datos
-                    if (usuarioDAO.actualizarUsuario(usuarioSeleccionado)) {
+                    boolean exito = usuarioDAO.activarUsuario(usuarioSeleccionado.getId());
+                    
+                    if (exito) {
+                        // Actualizar el estado del usuario localmente
+                        usuarioSeleccionado.setActivo(true);
+                        
                         // Actualizar la tabla
                         tablaUsuarios.refresh();
                         
                         // Actualizar el CheckBox si el usuario que se está modificando está seleccionado
                         if (chkActivo != null) {
-                            chkActivo.setSelected(nuevoEstado);
+                            chkActivo.setSelected(true);
                         }
                         
-                        Alertas.mostrarExito("Usuario " + (nuevoEstado ? "activado" : "desactivado") + " correctamente.");
+                        Alertas.mostrarExito("Usuario activado correctamente.");
                         
-                        // Recargar la lista para reflejar los cambios
+                        // Recargar la lista
                         loadUsuarios();
+                        
+                        // Restaurar la selección
+                        if (selectedIndex >= 0 && selectedIndex < tablaUsuarios.getItems().size()) {
+                            tablaUsuarios.getSelectionModel().select(selectedIndex);
+                        }
                     } else {
-                        Alertas.mostrarError("Error al " + accion + " el usuario. Verifique la conexión a la base de datos.");
+                        Alertas.mostrarError("Error al activar el usuario. Verifique la conexión a la base de datos.");
                     }
                 }
             } catch (Exception ex) {
-                Alertas.mostrarError("Error durante la modificación: " + ex.getMessage());
+                Alertas.mostrarError("Error: " + ex.getMessage());
                 ex.printStackTrace();
             }
         } else {
-            Alertas.mostrarError("Selecciona un usuario para " + (usuarioSeleccionado != null && usuarioSeleccionado.isActivo() ? "desactivar" : "activar") + ".");
+            Alertas.mostrarError("Selecciona un usuario válido para activar.");
+        }
+    }
+    
+    @FXML
+    private void handleDesactivarUsuario(ActionEvent e) {
+        UsuarioVO usuarioSeleccionado = tablaUsuarios.getSelectionModel().getSelectedItem();
+        if (usuarioSeleccionado != null) {
+            try {
+                // Guardar el índice seleccionado para restaurarlo después
+                int selectedIndex = tablaUsuarios.getSelectionModel().getSelectedIndex();
+                
+                // Confirmar la acción con el usuario
+                Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmacion.setTitle("Confirmar desactivación");
+                confirmacion.setHeaderText("¿Está seguro de desactivar este usuario?");
+                confirmacion.setContentText("Esta acción desactivará al usuario " + usuarioSeleccionado.getNombre() + 
+                                          " con correo " + usuarioSeleccionado.getCorreo());
+                
+                Optional<ButtonType> result = confirmacion.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    System.out.println("Intentando desactivar usuario: ID=" + usuarioSeleccionado.getId() + 
+                                      ", Nombre=" + usuarioSeleccionado.getNombre());
+                    
+                    boolean exito = usuarioDAO.desactivarUsuario(usuarioSeleccionado.getId());
+                    
+                    if (exito) {
+                        // Actualizar el estado del usuario localmente
+                        usuarioSeleccionado.setActivo(false);
+                        
+                        // Actualizar la tabla
+                        tablaUsuarios.refresh();
+                        
+                        // Actualizar el CheckBox si el usuario que se está modificando está seleccionado
+                        if (chkActivo != null) {
+                            chkActivo.setSelected(false);
+                        }
+                        
+                        Alertas.mostrarExito("Usuario desactivado correctamente.");
+                        
+                        // Recargar la lista
+                        loadUsuarios();
+                        
+                        // Restaurar la selección
+                        if (selectedIndex >= 0 && selectedIndex < tablaUsuarios.getItems().size()) {
+                            tablaUsuarios.getSelectionModel().select(selectedIndex);
+                        }
+                    } else {
+                        Alertas.mostrarError("Error al desactivar el usuario. Verifique la conexión a la base de datos.");
+                    }
+                }
+            } catch (Exception ex) {
+                Alertas.mostrarError("Error: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            Alertas.mostrarError("Selecciona un usuario válido para desactivar.");
         }
     }
 

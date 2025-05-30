@@ -28,7 +28,28 @@ public class MenuAdministradorController {
     @FXML
     private ImageView logoImageView;
 
-    
+    @FXML private Button btnVolverMenu;
+    @FXML
+    private void handleVolverMenu() {
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) btnVolverMenu.getScene().getWindow();
+            stage.close();
+            
+            // Cargar el menú de usuario
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            Parent root = loader.load();
+            
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Bienvenido a PelisPedia");
+            newStage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al volver al menú: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {

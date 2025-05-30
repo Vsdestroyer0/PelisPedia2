@@ -2,16 +2,21 @@ package Controles;
 
 import aplicacion.VO.PeliculaVO;
 import aplicacion.Vistas.Alertas;
+import aplicacion.application.HelloApplication;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 
@@ -60,19 +65,28 @@ public class AltaPeliculasController {
     private ImageView imgPreview;
     private byte[] currentImageBytes;
 
-
-
-    public void handleAltaPeliculas(ActionEvent event) {
+    @FXML private Button btnVolverMenu;
+    @FXML
+    private void handleVolverMenu() {
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) btnVolverMenu.getScene().getWindow();
+            stage.close();
+            
+            // Cargar el menú de usuario
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("MenuAdministrador.fxml"));
+            Parent root = loader.load();
+            
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Menú Administrador - PelisPedia");
+            newStage.show();
+        } catch (IOException e) {
+            Alertas.mostrarError("Error al volver al menú: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    public void handleModificarPeliculas(ActionEvent event) {
-    }
-
-    public void handleEliminarPeliculas(ActionEvent event) {
-    }
-
-    public void handleCerrarSesion(ActionEvent event) {
-    }
 
     @FXML
     void Filechooser(ActionEvent event) {

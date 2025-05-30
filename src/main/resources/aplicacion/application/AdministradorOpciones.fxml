@@ -72,4 +72,9 @@
       <Button fx:id="btnFileChooser" layoutX="744.0" layoutY="215.0" mnemonicParsing="false" onAction="#Filechooser" text="Seleccionar" />
 
    </children>
+   <Button fx:id="btnVolverMenu" onAction="#handleVolverMenu" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Volver al Menú" textFill="WHITE">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Button>
 </AnchorPane>
