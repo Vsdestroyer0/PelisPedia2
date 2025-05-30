@@ -101,7 +101,7 @@ public class CarritoController implements Initializable {
     
     // Usuario ficticio para desarrollo (eliminar en producción)
     private final UsuarioVO usuarioPrueba = new UsuarioVO(1, "Usuario Prueba", "correo@example.com", "123456", 
-                                                        "¿Cuál es tu color favorito?", "Azul", 
+                                                        "¿Cuál es tu color favorito?", "Azul",
                                                         "Calle Principal 123", false, null, true);
     
     @Override

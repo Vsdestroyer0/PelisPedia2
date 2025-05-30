@@ -76,6 +76,11 @@
             <Font size="16.0" />
          </font>
       </Button>
+      <Button fx:id="ButtonReportes" layoutX="95.0" layoutY="440.0" mnemonicParsing="false" onAction="#handleReportes" prefHeight="52.0" prefWidth="237.0" style="-fx-background-color: red; -fx-background-radius: 20; -fx-cursor: hand;" text="Reportes" textFill="WHITE">
+            <font>
+                <Font size="16.0" />
+            </font>
+      </Button>
       <Label layoutX="595.0" layoutY="60.0" text="Administrador" textFill="WHITE">
          <font>
             <Font size="24.0" />
